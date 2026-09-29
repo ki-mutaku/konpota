@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SoupData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/soup_data.gd" id="1_data"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_data")
+id = &"konpota_creamy"
+display_name = "クリーミーコンポタ"
+sweetness = 0.0
+richness = 0.0
+texture = 0.0

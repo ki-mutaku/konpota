@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/direct_draggable_item.gd" id="1_drag"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_soup"]
+size = Vector2(128, 100)
+
+[node name="Soup" type="Area2D"]
+collision_layer = 1
+collision_mask = 2
+input_pickable = true
+script = ExtResource("1_drag")
+drag_tag = &"soup"
+accepted_behavior = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape_soup")
