@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://c82ifn7p5bcet"]
+
+[ext_resource type="PackedScene" path="res://scenes/ingredients/ingredient.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://resources/ingredients/corn.tres" id="2_data"]
+[ext_resource type="Texture2D" uid="uid://gj4c2hbbakek" path="res://assets/sprites/ingredients/corn.png" id="3_default"]
+[ext_resource type="Texture2D" uid="uid://w6xtw75y32qp" path="res://assets/sprites/ingredients/corn_many.png" id="4_many"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_corn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_default")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_many")
+}],
+"loop": 0,
+"name": &"many",
+"speed": 1.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uti78"]
+radius = 34.677666
+height = 109.029854
+
+[node name="Corn" unique_id=1933271628 instance=ExtResource("1_base")]
+payload = ExtResource("2_data")
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+scale = Vector2(0.09375, 0.09375)
+sprite_frames = SubResource("SpriteFrames_corn")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(7, -1.1920929e-07)
+rotation = 0.67905825
+shape = SubResource("CapsuleShape2D_uti78")

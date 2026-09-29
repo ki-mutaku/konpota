@@ -249,11 +249,11 @@ var ingredients: Array[IngredientData] = []
 
 ``` gdscript
 func update_game():
-    # Player
-    # Cooking
-    # Customer
-    # UI
-    # Score
+	# Player
+	# Cooking
+	# Customer
+	# UI
+	# Score
 ```
 
 機能ごとに分割する。
@@ -287,16 +287,16 @@ get_node("/root/Kitchen/UI/HUD/ScoreLabel").text = str(score)
 
 ``` text
 Customer
-    │
-    │ soup_served
-    ↓
+	│
+	│ soup_served
+	↓
 GameManager
-    │
-    ├── Satisfaction更新
-    │
-    └── Signal
-          ↓
-         HUD
+	│
+	├── Satisfaction更新
+	│
+	└── Signal
+		  ↓
+		 HUD
 ```
 
 ------------------------------------------------------------------------
@@ -373,9 +373,9 @@ HUDは基本的にゲーム状態を表示する責務を持つ。
 
 ``` text
 GameManager
-    ↓ Signal
+	↓ Signal
 HUD
-    ↓
+	↓
 表示更新
 ```
 

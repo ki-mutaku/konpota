@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ingredients/ingredient.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://resources/ingredients/parsley.tres" id="2_data"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ingredients/parsley.png" id="3_default"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ingredients/parsley_cut.png" id="4_cut"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_parsley"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("3_default")}],
+"loop": false,
+"name": &"default",
+"speed": 1.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("4_cut")}],
+"loop": false,
+"name": &"cut",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_parsley"]
+size = Vector2(131.2, 119.9)
+
+[node name="Parsley" instance=ExtResource("1_base")]
+payload = ExtResource("2_data")
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_parsley")
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape_parsley")
