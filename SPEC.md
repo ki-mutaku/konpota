@@ -127,7 +127,7 @@ Kitchen (Node2D)
 ├── Customers
 ├── Player
 └── UI
-    └── HUD
+	└── HUD
 ```
 
 Kitchenの責務：
@@ -146,7 +146,7 @@ Player (CharacterBody2D)
 ├── AnimatedSprite2D
 ├── CollisionShape2D
 └── InteractionArea (Area2D)
-    └── CollisionShape2D
+	└── CollisionShape2D
 ```
 
 責務：
@@ -459,13 +459,13 @@ git switch -c feature/<feature-name>
 
 ``` text
 feature branch
-      ↓
+	  ↓
 Push
-      ↓
+	  ↓
 Pull Request
-      ↓
+	  ↓
 Review / 動作確認
-      ↓
+	  ↓
 main
 ```
 
