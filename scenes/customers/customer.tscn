@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer.gd" id="1_customer"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/direct_drop_target.tscn" id="2_target"]
+[ext_resource type="Script" path="res://scripts/customers/customer_drop_target.gd" id="3_target_script"]
+
+[node name="Customer" type="Node2D"]
+script = ExtResource("1_customer")
+
+[node name="DropTarget" parent="." instance=ExtResource("2_target")]
+script = ExtResource("3_target_script")
+accepted_tag = &"soup"
+
+[connection signal="item_received" from="DropTarget" to="." method="_on_drop_target_item_received"]
