@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://bypcjuqu320pn"]
+[gd_scene load_steps=7 format=3 uid="uid://bypcjuqu320pn"]
 
 [ext_resource type="PackedScene" path="res://scenes/ingredients/ingredient.tscn" id="1_base"]
 [ext_resource type="Resource" path="res://resources/ingredients/butter.tres" id="2_data"]
 [ext_resource type="Texture2D" uid="uid://dgisspkvldegv" path="res://assets/sprites/ingredients/butter.png" id="3_default"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ingredients/butter_cut.png" id="4_cut"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_butter"]
 animations = [{
@@ -12,6 +13,14 @@ animations = [{
 }],
 "loop": 0,
 "name": &"default",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_cut")
+}],
+"loop": 0,
+"name": &"cut",
 "speed": 1.0
 }]
 
