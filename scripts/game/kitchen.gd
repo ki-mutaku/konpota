@@ -4,7 +4,6 @@ signal soup_served(soup: Variant)
 
 @onready var pot: CookingPot = %Pot
 @onready var stove: CookingStove = %Stove
-@onready var ladle: CookingLadle = %Ladle
 @onready var mixer: CookingMixer = %Mixer
 @onready var cutting_board: CookingCuttingBoard = %CuttingBoard
 @onready var serving_counter: ServingCounter = %ServingCounter
@@ -24,7 +23,6 @@ signal soup_served(soup: Variant)
 
 func _ready() -> void:
 	stove.heat_changed.connect(pot.set_heat_level)
-	ladle.dragged.connect(_on_ladle_dragged)
 	serving_counter.soup_served.connect(_on_soup_served)
 	serving_counter.soup_changed.connect(_on_serving_soup_changed)
 	pot.contents_changed.connect(_on_pot_contents_changed)
@@ -49,11 +47,6 @@ func transfer_mixer_contents_to_pot() -> void:
 	for entry: Dictionary in mixer.take_contents():
 		pot.add_ingredient(entry.get("data"), float(entry.get("amount", 1.0)))
 	status_label.text = "ミキサーの中身を鍋へ移しました"
-
-
-func _on_ladle_dragged(pointer_position: Vector2, distance: float) -> void:
-	if pot.contains_global_point(pointer_position):
-		pot.register_stir_distance(distance)
 
 
 func _on_soup_served(soup: Variant) -> void:
@@ -91,7 +84,6 @@ func reset_cooking_state() -> void:
 	stove.reset_state()
 	mixer.reset_state()
 	cutting_board.reset_state()
-	ladle.reset_state()
 	serving_counter.reset_state()
 	pot_drop_highlight.visible = false
 	mixer_drop_highlight.visible = false
