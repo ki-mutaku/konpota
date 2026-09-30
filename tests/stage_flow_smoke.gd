@@ -87,7 +87,9 @@ func _run_smoke_test() -> void:
 	await process_frame
 	assert(current_scene != null and current_scene.name == "StageSession")
 	var session_manager: StageManager = current_scene.get_node("StageManager") as StageManager
-	var session_receiver: StageResultReceiver = current_scene.get_node("ResultReceiver") as StageResultReceiver
+	var session_receiver: StageResultReceiver = (
+		current_scene.get_node("ResultReceiver") as StageResultReceiver
+	)
 	assert(session_manager.get_state() == StageManager.State.PLAYING)
 	assert(session_manager.finish_stage())
 	assert(session_receiver.get_result() == session_manager.get_result())
