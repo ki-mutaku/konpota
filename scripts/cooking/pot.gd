@@ -5,17 +5,32 @@ signal ingredient_added(ingredient: Variant, amount: float)
 signal heat_level_changed(level: float)
 signal stirring_updated(total_distance: float)
 signal contents_changed(snapshot: Dictionary)
+signal cooking_started(snapshot: Dictionary)
+signal cooking_completed(soup: Dictionary)
 
 @export_range(24.0, 256.0, 1.0) var interaction_radius: float = 92.0
+@export_range(0.1, 30.0, 0.1) var cook_duration: float = 3.0
+
+const WATER_POT_TEXTURE: Texture2D = preload(
+	"res://assets/sprites/utensils/water-pot-transparent.png"
+)
+const CORN_POT_TEXTURE: Texture2D = preload(
+	"res://assets/sprites/utensils/corn-pot-transparent.png"
+)
 
 var heat_level: float = 0.0
 var stir_distance: float = 0.0
 var ingredients: Array[Dictionary] = []
+var is_cooking: bool = false
+var _cooking_snapshot: Dictionary = {}
+var _cook_generation: int = 0
 
 @onready var soup_surface: Polygon2D = %SoupSurface
 @onready var heat_glow: Polygon2D = %HeatGlow
 @onready var state_label: Label = %StateLabel
+@onready var ingredient_drop_area: DirectDropTarget = $IngredientDropArea
 @onready var bowl_drop_area: DirectDropTarget = %BowlDropArea
+@onready var pot_state_sprite: Sprite2D = %PotStateSprite
 
 
 func _ready() -> void:
@@ -23,7 +38,7 @@ func _ready() -> void:
 
 
 func add_ingredient(ingredient: Variant, amount: float = 1.0) -> void:
-	if ingredient == null or amount <= 0.0:
+	if ingredient == null or amount <= 0.0 or is_cooking:
 		return
 
 	ingredients.append({"data": ingredient, "amount": amount})
@@ -61,6 +76,14 @@ func has_contents() -> bool:
 	return not ingredients.is_empty()
 
 
+func has_ingredient_id(ingredient_id: StringName) -> bool:
+	for entry: Dictionary in ingredients:
+		var data: Variant = entry.get("data")
+		if data != null and data.get("id") == ingredient_id:
+			return true
+	return false
+
+
 func get_soup_snapshot() -> Dictionary:
 	return {
 		"ingredients": ingredients.duplicate(true),
@@ -70,7 +93,7 @@ func get_soup_snapshot() -> Dictionary:
 
 
 func take_soup_snapshot() -> Dictionary:
-	if ingredients.is_empty():
+	if ingredients.is_empty() or is_cooking:
 		return {}
 
 	var snapshot: Dictionary = get_soup_snapshot()
@@ -79,6 +102,8 @@ func take_soup_snapshot() -> Dictionary:
 
 
 func clear() -> void:
+	if is_cooking:
+		return
 	ingredients.clear()
 	stir_distance = 0.0
 	_refresh_visuals()
@@ -86,14 +111,54 @@ func clear() -> void:
 
 
 func reset_state() -> void:
+	_cook_generation += 1
+	is_cooking = false
+	_cooking_snapshot.clear()
 	heat_level = 0.0
 	clear()
+	pot_state_sprite.texture = WATER_POT_TEXTURE
+
+
+func start_cooking(recipe_id: StringName, display_name: String) -> bool:
+	if is_cooking or ingredients.is_empty() or not has_ingredient_id(&"corn"):
+		return false
+
+	is_cooking = true
+	_cook_generation += 1
+	var generation: int = _cook_generation
+	_cooking_snapshot = get_soup_snapshot()
+	_cooking_snapshot["recipe_id"] = recipe_id
+	_cooking_snapshot["display_name"] = display_name
+	pot_state_sprite.texture = CORN_POT_TEXTURE
+	cooking_started.emit(_cooking_snapshot.duplicate(true))
+	_refresh_visuals()
+	get_tree().create_timer(cook_duration).timeout.connect(
+		_complete_cooking.bind(generation)
+	)
+	return true
+
+
+func _complete_cooking(generation: int) -> void:
+	if not is_cooking or generation != _cook_generation:
+		return
+
+	var completed_soup: Dictionary = _cooking_snapshot.duplicate(true)
+	is_cooking = false
+	_cooking_snapshot.clear()
+	ingredients.clear()
+	stir_distance = 0.0
+	pot_state_sprite.texture = WATER_POT_TEXTURE
+	_refresh_visuals()
+	_emit_contents_changed()
+	cooking_completed.emit(completed_soup)
 
 
 func _on_ingredient_drop_area_item_received(
 	payload: Variant,
 	source: DirectDraggableItem,
 ) -> void:
+	if is_cooking:
+		return
 	add_ingredient(payload)
 	source.reset_processing_state()
 
@@ -115,7 +180,11 @@ func _emit_contents_changed() -> void:
 
 
 func _refresh_visuals() -> void:
-	soup_surface.visible = not ingredients.is_empty()
+	soup_surface.visible = false
 	heat_glow.modulate.a = heat_level * 0.8
-	bowl_drop_area.enabled = has_contents()
-	state_label.text = "材料 %d / 混ぜ %.0f" % [ingredients.size(), stir_distance]
+	ingredient_drop_area.enabled = not is_cooking
+	bowl_drop_area.enabled = has_contents() and not is_cooking
+	if is_cooking:
+		state_label.text = "調理中…"
+	else:
+		state_label.text = "材料 %d / 混ぜ %.0f" % [ingredients.size(), stir_distance]

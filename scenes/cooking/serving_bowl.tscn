@@ -29,6 +29,12 @@ position = Vector2(0, -15)
 polygon = PackedVector2Array(-48, -8, 48, -8, 42, 8, -42, 8)
 color = Color(1, 0.72, 0.14, 1)
 
+[node name="SoupSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2(0, -8)
+scale = Vector2(0.08, 0.08)
+
 [node name="BowlLabel" type="Label" parent="."]
 unique_name_in_owner = true
 offset_left = -52.0

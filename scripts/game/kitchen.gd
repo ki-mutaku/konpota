@@ -23,9 +23,12 @@ signal soup_served(soup: Variant)
 
 func _ready() -> void:
 	stove.heat_changed.connect(pot.set_heat_level)
+	stove.cook_requested.connect(_on_cook_requested)
 	serving_counter.soup_served.connect(_on_soup_served)
 	serving_counter.soup_changed.connect(_on_serving_soup_changed)
 	pot.contents_changed.connect(_on_pot_contents_changed)
+	pot.cooking_started.connect(_on_cooking_started)
+	pot.cooking_completed.connect(_on_cooking_completed)
 	pot_ingredient_drop_area.highlight_changed.connect(_on_pot_highlight_changed)
 	pot_bowl_drop_area.highlight_changed.connect(_on_pot_highlight_changed)
 	mixer_ingredient_drop_area.highlight_changed.connect(_on_mixer_highlight_changed)
@@ -57,6 +60,50 @@ func _on_soup_served(soup: Variant) -> void:
 func _on_serving_soup_changed(soup: Variant) -> void:
 	if soup != null:
 		status_label.text = "盛り付けました。器を客へドラッグしてください"
+
+
+func _on_cook_requested() -> void:
+	if pot.is_cooking:
+		status_label.text = "調理中です。完成まで待ってください"
+		return
+	if serving_counter.has_soup():
+		status_label.text = "カウンターのコンポタを提供してください"
+		return
+	if not pot.has_ingredient_id(&"corn"):
+		status_label.text = "ペースト状コーンを鍋に入れてください"
+		return
+
+	var recipe: Dictionary = _resolve_recipe(pot.get_soup_snapshot())
+	var recipe_id: StringName = recipe.get("id", &"konpota_water")
+	var display_name: String = str(recipe.get("display_name", "水煮コンポタ"))
+	pot.start_cooking(recipe_id, display_name)
+
+
+func _on_cooking_started(_snapshot: Dictionary) -> void:
+	status_label.text = "調理中…3秒後に完成します"
+
+
+func _on_cooking_completed(soup: Dictionary) -> void:
+	if serving_counter.set_soup(soup):
+		status_label.text = "%s完成！カウンターから客へ提供" % soup["display_name"]
+
+
+func _resolve_recipe(snapshot: Dictionary) -> Dictionary:
+	var ingredient_ids: Dictionary = {}
+	for entry: Dictionary in snapshot.get("ingredients", []):
+		var data: Variant = entry.get("data")
+		if data != null:
+			ingredient_ids[data.get("id")] = true
+
+	if ingredient_ids.has(&"sugar") and ingredient_ids.has(&"milk"):
+		return {"id": &"konpota_sweet", "display_name": "スウィートコンポタ"}
+	if ingredient_ids.has(&"parsley"):
+		return {"id": &"konpota_fresh", "display_name": "さわやかコンポタ"}
+	if ingredient_ids.has(&"milk"):
+		return {"id": &"konpota_creamy", "display_name": "トロトロコンポタ"}
+	if ingredient_ids.has(&"butter"):
+		return {"id": &"konpota_normal", "display_name": "ノーマルコンポタ"}
+	return {"id": &"konpota_water", "display_name": "水煮コンポタ"}
 
 
 func _on_pot_highlight_changed(active: bool) -> void:
