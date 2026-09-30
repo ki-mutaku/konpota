@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -72,7 +74,10 @@ jobs:
           godot --version
 
       - name: Build Godot class cache
-        run: godot --headless --path . --editor --quit
+        run: godot --headless --path . --import --quit
+
+      - name: Verify images and Japanese font
+        run: godot --headless --path . --script tests/web_assets_smoke.gd
 
       - name: Check GDScript syntax
         shell: bash

@@ -30,6 +30,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Verify LFS assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git lfs fsck --objects
+          if grep -rl '^version https://git-lfs.github.com/spec/v1$' assets; then
+            echo '::error::Unresolved Git LFS pointers found in assets'
+            exit 1
+          fi
 
       - name: Install Godot
         shell: bash
@@ -65,6 +77,10 @@ jobs:
         shell: bash
         run: godot --headless --path . --import --quit
 
+      - name: Verify images and Japanese font
+        shell: bash
+        run: godot --headless --path . --script tests/web_assets_smoke.gd
+
       - name: Export WebGL build
         shell: bash
         run: |
@@ -73,6 +89,13 @@ jobs:
           mkdir -p "$(dirname "${EXPORT_PATH}")"
           godot --headless --path . --export-release "${EXPORT_PRESET}" "${EXPORT_PATH}"
           touch "$(dirname "${EXPORT_PATH}")/.nojekyll"
+
+      - name: Verify exported asset pack
+        shell: bash
+        run: |
+          godot --headless --path "${RUNNER_TEMP}" \
+            --main-pack "${GITHUB_WORKSPACE}/${EXPORT_PATH%.html}.pck" \
+            --script res://tests/web_assets_smoke.gd
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
