@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/stage_session.gd" id="1_session"]
+[ext_resource type="PackedScene" path="res://scenes/game/kitchen.tscn" id="2_kitchen"]
+[ext_resource type="PackedScene" path="res://scenes/game/stage_manager.tscn" id="3_manager"]
+[ext_resource type="Script" path="res://scripts/game/stage_result_receiver.gd" id="4_receiver"]
+
+[node name="StageSession" type="Node"]
+script = ExtResource("1_session")
+
+[node name="Kitchen" parent="." instance=ExtResource("2_kitchen")]
+
+[node name="StageManager" parent="." instance=ExtResource("3_manager")]
+
+[node name="ResultReceiver" type="Node" parent="."]
+script = ExtResource("4_receiver")

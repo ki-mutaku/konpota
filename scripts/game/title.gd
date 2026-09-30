@@ -11,7 +11,11 @@ func _ready() -> void:
 
 
 func _on_game_start_pressed() -> void:
-	status_label.text = "ゲーム本編は準備中です"
+	game_start_button.disabled = true
+	var error: Error = get_tree().change_scene_to_file("res://scenes/game/stage_session.tscn")
+	if error != OK:
+		game_start_button.disabled = false
+		status_label.text = "Stageを読み込めませんでした"
 
 
 func _on_exit_pressed() -> void:
