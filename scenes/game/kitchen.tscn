@@ -7,6 +7,14 @@
 [ext_resource type="PackedScene" path="res://scenes/cooking/mixer.tscn" id="5_mixer"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/ladle.tscn" id="6_ladle"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/serving_counter.tscn" id="7_counter"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/cutting_board.tscn" id="8_board"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/knife.tscn" id="9_knife"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/corn.tscn" id="10_corn"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/milk.tscn" id="11_milk"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/butter.tscn" id="12_butter"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/salt.tscn" id="13_salt"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/sugar.tscn" id="14_sugar"]
+[ext_resource type="PackedScene" path="res://scenes/ingredients/parsley.tscn" id="15_parsley"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_hud"]
 bg_color = Color(0.21, 0.105, 0.047, 0.94)
@@ -85,7 +93,6 @@ modulate = Color(1, 1, 1, 0.001)
 position = Vector2(600, 400)
 
 [node name="Mixer" parent="KitchenObjects" unique_id=571602389 instance=ExtResource("5_mixer")]
-modulate = Color(1, 1, 1, 0.001)
 position = Vector2(170, 360)
 
 [node name="Ladle" parent="KitchenObjects" unique_id=1677077224 instance=ExtResource("6_ladle")]
@@ -96,7 +103,32 @@ position = Vector2(885, 390)
 position = Vector2(520, 650)
 show_counter_visuals = false
 
+[node name="CuttingBoard" parent="KitchenObjects" instance=ExtResource("8_board")]
+position = Vector2(300, 430)
+
+[node name="Knife" parent="KitchenObjects" instance=ExtResource("9_knife")]
+position = Vector2(220, 525)
+
 [node name="Ingredients" type="Node2D" parent="." unique_id=793361217]
+
+[node name="Corn" parent="Ingredients" instance=ExtResource("10_corn")]
+position = Vector2(105, 145)
+
+[node name="Milk" parent="Ingredients" instance=ExtResource("11_milk")]
+position = Vector2(225, 145)
+
+[node name="Butter" parent="Ingredients" instance=ExtResource("12_butter")]
+position = Vector2(330, 145)
+
+[node name="Salt" parent="Ingredients" instance=ExtResource("13_salt")]
+position = Vector2(450, 145)
+
+[node name="Sugar" parent="Ingredients" instance=ExtResource("14_sugar")]
+position = Vector2(675, 150)
+
+[node name="Parsley" parent="Ingredients" instance=ExtResource("15_parsley")]
+position = Vector2(80, 590)
+scale = Vector2(0.68, 0.68)
 
 [node name="Customers" type="Node2D" parent="." unique_id=1011901529]
 

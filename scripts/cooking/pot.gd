@@ -92,9 +92,10 @@ func reset_state() -> void:
 
 func _on_ingredient_drop_area_item_received(
 	payload: Variant,
-	_source: DirectDraggableItem,
+	source: DirectDraggableItem,
 ) -> void:
 	add_ingredient(payload)
+	source.reset_processing_state()
 
 
 func _on_bowl_drop_area_item_received(
