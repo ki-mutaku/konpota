@@ -17,6 +17,7 @@ enum AcceptedBehavior {
 
 @export var drag_tag: StringName = &"ingredient"
 @export var payload: Resource
+@export var processing_state: StringName = &"raw"
 @export var movement_bounds: Rect2 = Rect2(0.0, 0.0, 1280.0, 720.0)
 @export var use_viewport_bounds: bool = true
 @export var return_on_rejected: bool = true
@@ -56,6 +57,28 @@ func _input(event: InputEvent) -> void:
 
 func get_interaction_payload() -> Variant:
 	return payload if payload != null else self
+
+
+func get_payload_id() -> StringName:
+	if payload == null:
+		return &""
+	return StringName(str(payload.get("id")))
+
+
+func mark_processed(state: StringName, animation_name: StringName = &"") -> void:
+	processing_state = state
+	if animation_name == &"":
+		return
+	var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.sprite_frames.has_animation(animation_name):
+		sprite.play(animation_name)
+
+
+func reset_processing_state() -> void:
+	processing_state = &"raw"
+	var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite != null and sprite.sprite_frames.has_animation(&"default"):
+		sprite.play(&"default")
 
 
 func reset_to_home() -> void:
