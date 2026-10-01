@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://qfq3p28aabl1" path="res://assets/ui/kitchen/kitchen_background.png" id="1_background"]
+
+[node name="KitchenBG" type="TextureRect"]
+z_index = -1
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("1_background")
+expand_mode = 1
+stretch_mode = 6
