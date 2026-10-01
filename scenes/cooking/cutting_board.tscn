@@ -1,40 +1,42 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://drwrhwbu82hmy"]
 
-[ext_resource type="Script" path="res://scripts/cooking/cutting_board.gd" id="1_board"]
-[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+[ext_resource type="Script" uid="uid://cngisec3gdywj" path="res://scripts/cooking/cutting_board.gd" id="1_board"]
+[ext_resource type="Script" uid="uid://dg76pld6hfb5w" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+[ext_resource type="AudioStream" uid="uid://db4onjimk7e" path="res://assets/audio/cut_with_knife.mp3" id="3_cut"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_board"]
 size = Vector2(150, 160)
 
-[node name="CuttingBoard" type="Node2D"]
+[node name="CuttingBoard" type="Node2D" unique_id=2130140209]
 unique_name_in_owner = true
 script = ExtResource("1_board")
 
-[node name="BoardGuide" type="Polygon2D" parent="."]
+[node name="BoardGuide" type="Polygon2D" parent="." unique_id=970161690]
 color = Color(1, 0.78, 0.12, 0.16)
 polygon = PackedVector2Array(-75, -80, 75, -80, 75, 80, -75, 80)
 
-[node name="StateLabel" type="Label" parent="."]
+[node name="StateLabel" type="Label" parent="." unique_id=2119101113]
 unique_name_in_owner = true
 offset_left = -98.0
 offset_top = -112.0
 offset_right = 98.0
 offset_bottom = -84.0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.16, 0.1, 0.04, 1)
 theme_override_font_sizes/font_size = 16
 text = "バター / パセリを置く"
 horizontal_alignment = 1
 
-[node name="IngredientDropArea" type="Area2D" parent="."]
+[node name="IngredientDropArea" type="Area2D" parent="." unique_id=171019156]
 unique_name_in_owner = true
 collision_layer = 2
-collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 accepted_payload_ids = Array[StringName]([&"butter", &"parsley"])
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea" unique_id=1840231123]
 shape = SubResource("RectangleShape_board")
+
+[node name="CutSound" type="AudioStreamPlayer" parent="." unique_id=358988786]
+stream = ExtResource("3_cut")
 
 [connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]

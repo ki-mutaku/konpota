@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmds2fkinydhc"
-path="res://.godot/imported/kitchen_background_bk.png-e6cd237b97ecfa4b9636683a458378da.ctex"
+uid="uid://cqesnrf6lkw6c"
+path="res://.godot/imported/corn-pot-transparent.png-bf68ae468bfe9bf1aa7890ac78f7e1f6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/kitchen/kitchen_background_bk.png"
-dest_files=["res://.godot/imported/kitchen_background_bk.png-e6cd237b97ecfa4b9636683a458378da.ctex"]
+source_file="res://assets/sprites/utensils/corn-pot-transparent.png"
+dest_files=["res://.godot/imported/corn-pot-transparent.png-bf68ae468bfe9bf1aa7890ac78f7e1f6.ctex"]
 
 [params]
 

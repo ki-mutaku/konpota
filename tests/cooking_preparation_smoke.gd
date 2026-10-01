@@ -36,19 +36,34 @@ func _run_smoke_test() -> void:
 	var cut_to: Vector2 = butter.global_position + Vector2(0.0, 80.0)
 	assert(board.try_slice_segment(cut_from, cut_to), "Downward swipe should cut butter")
 	assert(butter.processing_state == &"cut")
+	var butter_sprite: AnimatedSprite2D = butter.get_node("AnimatedSprite2D")
+	assert(butter_sprite.animation == &"cut", "Cut butter should use butter_cut.png")
 	assert(pot_target.accepts(butter), "Cut butter should be accepted by the pot")
 
 	var mixer_target: DirectDropTarget = (
 		mixer.get_node("IngredientDropArea") as DirectDropTarget
 	)
+	var vacant_visual: Sprite2D = mixer.get_node("VacantVisual") as Sprite2D
+	var before_visual: Sprite2D = mixer.get_node("BeforeVisual") as Sprite2D
+	var after_visual: Sprite2D = mixer.get_node("AfterVisual") as Sprite2D
+	assert(vacant_visual.visible, "Empty mixer should display mixer_vacant")
+	assert(not before_visual.visible and not after_visual.visible)
 	assert(mixer_target.try_receive(corn), "Mixer should accept corn")
+	assert(not vacant_visual.visible and before_visual.visible)
+	assert(not after_visual.visible, "Loaded mixer should display mixer_before")
 	for _pulse: int in mixer.required_pulses:
 		mixer.register_pulse()
 	assert(mixer.is_processed, "Required pulses should make corn paste")
+	assert(not vacant_visual.visible and not before_visual.visible)
+	assert(after_visual.visible, "Processed mixer should display mixer_after")
 	assert(mixer.output_item.visible, "Processed corn output should become draggable")
 	assert(mixer.output_item.processing_state == &"paste")
 	assert(pot_target.accepts(mixer.output_item), "Corn paste should be accepted by the pot")
 
+	board.reset_state()
+	mixer.reset_state()
+	# Allow the audio server to release stopped SE playback before shutdown.
+	await create_timer(0.5).timeout
 	print("Cooking preparation smoke test passed")
 	quit(0)
 
