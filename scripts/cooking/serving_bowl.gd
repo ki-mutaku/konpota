@@ -4,10 +4,19 @@ extends DirectDraggableItem
 signal soup_delivered(soup: Variant)
 signal soup_changed(soup: Variant)
 
+const RECIPE_TEXTURES: Dictionary = {
+	&"konpota_normal": preload("res://assets/sprites/recipes/konpota_normal.png"),
+	&"konpota_creamy": preload("res://assets/sprites/recipes/konpota_creamy.png"),
+	&"konpota_sweet": preload("res://assets/sprites/recipes/konpota_sweet.png"),
+	&"konpota_fresh": preload("res://assets/sprites/recipes/konpota_fresh.png"),
+	&"konpota_water": preload("res://assets/sprites/recipes/konpota_water.png"),
+}
+
 var soup: Variant = null
 
 @onready var soup_fill: Polygon2D = %SoupFill
 @onready var bowl_label: Label = %BowlLabel
+@onready var soup_sprite: Sprite2D = %SoupSprite
 
 
 func _ready() -> void:
@@ -21,8 +30,11 @@ func fill_soup(value: Variant) -> bool:
 		return false
 	soup = value
 	drag_tag = &"soup"
-	soup_fill.visible = true
-	bowl_label.text = "コンポタ"
+	var recipe_id: StringName = _get_recipe_id(value)
+	soup_sprite.texture = RECIPE_TEXTURES.get(recipe_id) as Texture2D
+	soup_sprite.visible = soup_sprite.texture != null
+	soup_fill.visible = not soup_sprite.visible
+	bowl_label.text = _get_display_name(value)
 	soup_changed.emit(soup)
 	return true
 
@@ -32,6 +44,8 @@ func clear_soup() -> void:
 	drag_tag = &"bowl"
 	if is_node_ready():
 		soup_fill.visible = false
+		soup_sprite.visible = false
+		soup_sprite.texture = null
 		bowl_label.text = "器"
 	soup_changed.emit(soup)
 
@@ -42,6 +56,22 @@ func has_soup() -> bool:
 
 func get_interaction_payload() -> Variant:
 	return soup if has_soup() else self
+
+
+func _get_recipe_id(value: Variant) -> StringName:
+	if value is SoupData:
+		return value.id
+	if value is Dictionary:
+		return StringName(value.get("recipe_id", ""))
+	return &""
+
+
+func _get_display_name(value: Variant) -> String:
+	if value is SoupData:
+		return value.display_name
+	if value is Dictionary:
+		return str(value.get("display_name", "コンポタ"))
+	return "コンポタ"
 
 
 func reset_bowl() -> void:

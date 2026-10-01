@@ -16,6 +16,7 @@ var is_processed: bool = false
 
 @onready var blade: Polygon2D = %Blade
 @onready var state_label: Label = %StateLabel
+@onready var vacant_visual: Sprite2D = %VacantVisual
 @onready var before_visual: Sprite2D = %BeforeVisual
 @onready var after_visual: Sprite2D = %AfterVisual
 @onready var output_item: DirectDraggableItem = %OutputItem
@@ -118,7 +119,8 @@ func _finish_processing() -> void:
 
 
 func _refresh_visuals() -> void:
-	before_visual.visible = not is_processed
+	vacant_visual.visible = contents.is_empty()
+	before_visual.visible = not contents.is_empty() and not is_processed
 	after_visual.visible = is_processed
 	if is_operating:
 		state_label.text = "攪拌中 %d/%d" % [pulse_count, required_pulses]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/cooking/mixer.gd" id="1_mixer"]
 [ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/utensils/mixer_after.png" id="4_after"]
 [ext_resource type="Script" path="res://scripts/cooking/direct_draggable_item.gd" id="5_drag"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ingredients/corn_many.png" id="6_corn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/utensils/mixer_vacant.png" id="7_vacant"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_drop"]
 size = Vector2(172, 150)
@@ -17,8 +18,14 @@ radius = 42.0
 unique_name_in_owner = true
 script = ExtResource("1_mixer")
 
+[node name="VacantVisual" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(0.14, 0.14)
+texture = ExtResource("7_vacant")
+
 [node name="BeforeVisual" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+visible = false
 scale = Vector2(0.14, 0.14)
 texture = ExtResource("3_before")
 
