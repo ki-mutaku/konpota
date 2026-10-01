@@ -95,15 +95,27 @@ func _resolve_recipe(snapshot: Dictionary) -> Dictionary:
 		if data != null:
 			ingredient_ids[data.get("id")] = true
 
-	if ingredient_ids.has(&"sugar") and ingredient_ids.has(&"milk"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk", &"sugar"]):
 		return {"id": &"konpota_sweet", "display_name": "スウィートコンポタ"}
-	if ingredient_ids.has(&"parsley"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"parsley"]):
 		return {"id": &"konpota_fresh", "display_name": "さわやかコンポタ"}
-	if ingredient_ids.has(&"milk"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk"]):
 		return {"id": &"konpota_creamy", "display_name": "トロトロコンポタ"}
-	if ingredient_ids.has(&"butter"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"butter"]):
 		return {"id": &"konpota_normal", "display_name": "ノーマルコンポタ"}
 	return {"id": &"konpota_water", "display_name": "水煮コンポタ"}
+
+
+func _matches_ingredients(
+	ingredient_ids: Dictionary,
+	expected_ids: Array[StringName],
+) -> bool:
+	if ingredient_ids.size() != expected_ids.size():
+		return false
+	for ingredient_id: StringName in expected_ids:
+		if not ingredient_ids.has(ingredient_id):
+			return false
+	return true
 
 
 func _on_pot_highlight_changed(active: bool) -> void:

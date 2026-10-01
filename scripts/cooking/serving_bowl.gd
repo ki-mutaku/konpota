@@ -16,6 +16,8 @@ var soup: Variant = null
 
 @onready var soup_fill: Polygon2D = %SoupFill
 @onready var bowl_label: Label = %BowlLabel
+@onready var shadow: Polygon2D = %Shadow
+@onready var bowl_body: Polygon2D = %BowlBody
 @onready var soup_sprite: Sprite2D = %SoupSprite
 
 
@@ -31,10 +33,14 @@ func fill_soup(value: Variant) -> bool:
 	soup = value
 	drag_tag = &"soup"
 	var recipe_id: StringName = _get_recipe_id(value)
-	soup_sprite.texture = RECIPE_TEXTURES.get(recipe_id) as Texture2D
-	soup_sprite.visible = soup_sprite.texture != null
-	soup_fill.visible = not soup_sprite.visible
+	var fallback_texture: Texture2D = RECIPE_TEXTURES[&"konpota_water"] as Texture2D
+	var recipe_texture: Texture2D = RECIPE_TEXTURES.get(
+		recipe_id,
+		fallback_texture,
+	) as Texture2D
+	soup_sprite.texture = recipe_texture
 	bowl_label.text = _get_display_name(value)
+	_refresh_visuals()
 	soup_changed.emit(soup)
 	return true
 
@@ -43,10 +49,9 @@ func clear_soup() -> void:
 	soup = null
 	drag_tag = &"bowl"
 	if is_node_ready():
-		soup_fill.visible = false
-		soup_sprite.visible = false
 		soup_sprite.texture = null
 		bowl_label.text = "器"
+		_refresh_visuals()
 	soup_changed.emit(soup)
 
 
@@ -60,10 +65,43 @@ func get_interaction_payload() -> Variant:
 
 func _get_recipe_id(value: Variant) -> StringName:
 	if value is SoupData:
-		return value.id
+		return value.id if value.id != &"" else &"konpota_water"
 	if value is Dictionary:
-		return StringName(value.get("recipe_id", ""))
-	return &""
+		var recipe_id: StringName = StringName(value.get("recipe_id", ""))
+		if recipe_id != &"":
+			return recipe_id
+		return _infer_recipe_id(value)
+	return &"konpota_water"
+
+
+func _infer_recipe_id(snapshot: Dictionary) -> StringName:
+	var ingredient_ids: Dictionary = {}
+	for entry: Dictionary in snapshot.get("ingredients", []):
+		var data: Variant = entry.get("data")
+		if data != null:
+			ingredient_ids[StringName(str(data.get("id")))] = true
+
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk", &"sugar"]):
+		return &"konpota_sweet"
+	if _matches_ingredients(ingredient_ids, [&"corn", &"parsley"]):
+		return &"konpota_fresh"
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk"]):
+		return &"konpota_creamy"
+	if _matches_ingredients(ingredient_ids, [&"corn", &"butter"]):
+		return &"konpota_normal"
+	return &"konpota_water"
+
+
+func _matches_ingredients(
+	ingredient_ids: Dictionary,
+	expected_ids: Array[StringName],
+) -> bool:
+	if ingredient_ids.size() != expected_ids.size():
+		return false
+	for ingredient_id: StringName in expected_ids:
+		if not ingredient_ids.has(ingredient_id):
+			return false
+	return true
 
 
 func _get_display_name(value: Variant) -> String:
@@ -72,6 +110,16 @@ func _get_display_name(value: Variant) -> String:
 	if value is Dictionary:
 		return str(value.get("display_name", "コンポタ"))
 	return "コンポタ"
+
+
+func _refresh_visuals() -> void:
+	var has_contents: bool = has_soup()
+	var has_recipe_texture: bool = has_soup() and soup_sprite.texture != null
+	soup_sprite.visible = has_recipe_texture
+	shadow.visible = has_contents and not has_recipe_texture
+	bowl_body.visible = has_contents and not has_recipe_texture
+	soup_fill.visible = has_contents and not has_recipe_texture
+	bowl_label.visible = has_contents and not has_recipe_texture
 
 
 func reset_bowl() -> void:

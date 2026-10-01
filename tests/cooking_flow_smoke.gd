@@ -24,11 +24,15 @@ func _run_smoke_test() -> void:
 	customer_target.item_received.connect(_on_customer_received)
 	counter.soup_served.connect(_on_soup_served)
 
-	pot.add_ingredient(Resource.new())
+	pot.add_ingredient(load("res://resources/ingredients/corn.tres"))
+	pot.add_ingredient(load("res://resources/ingredients/milk.tres"))
 	var bowl: ServingBowl = counter.get_node("ServingBowl") as ServingBowl
 	var bowl_target: DirectDropTarget = pot.get_node("BowlDropArea") as DirectDropTarget
 	assert(bowl_target.try_receive(bowl), "Filled pot should accept an empty bowl")
 	assert(bowl.has_soup(), "Bowl should contain soup after dropping onto the pot")
+	var soup_sprite: Sprite2D = bowl.get_node("SoupSprite") as Sprite2D
+	assert(soup_sprite.texture != null, "Recipe-less soup should infer its image")
+	assert(soup_sprite.visible, "Inferred completed soup image should be visible")
 
 	var expected_payload: Variant = bowl.get_interaction_payload()
 	assert(customer_target.try_receive(bowl), "Customer target should accept a soup bowl")

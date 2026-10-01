@@ -6,13 +6,10 @@ signal cook_requested
 
 @export_range(40.0, 400.0, 1.0) var drag_pixels_for_full_power: float = 180.0
 @export_range(0.0, 1.0, 0.01) var heat_level: float = 0.0
-@export_range(1.0, 40.0, 1.0) var click_drag_threshold: float = 12.0
-
 var _dragging: bool = false
 var _touch_index: int = -1
 var _drag_start_y: float = 0.0
 var _drag_start_level: float = 0.0
-var _drag_distance: float = 0.0
 
 @onready var knob: Polygon2D = %Knob
 @onready var flame: Polygon2D = %Flame
@@ -57,25 +54,21 @@ func _begin_drag(pointer_y: float, touch_index: int) -> void:
 	_touch_index = touch_index
 	_drag_start_y = pointer_y
 	_drag_start_level = heat_level
-	_drag_distance = 0.0
+	cook_requested.emit()
 
 
 func _update_drag(pointer_y: float) -> void:
-	_drag_distance = maxf(_drag_distance, absf(pointer_y - _drag_start_y))
 	var delta: float = (_drag_start_y - pointer_y) / drag_pixels_for_full_power
 	_set_heat_level(_drag_start_level + delta)
 
 
-func _end_drag(allow_cook_request: bool = true) -> void:
-	var was_click: bool = _dragging and _drag_distance <= click_drag_threshold
+func _end_drag() -> void:
 	_dragging = false
 	_touch_index = -1
-	if allow_cook_request and was_click:
-		cook_requested.emit()
 
 
 func reset_state() -> void:
-	_end_drag(false)
+	_end_drag()
 	_set_heat_level(0.0)
 
 

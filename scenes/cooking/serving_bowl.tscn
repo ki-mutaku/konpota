@@ -15,11 +15,13 @@ drag_tag = &"bowl"
 accepted_behavior = 1
 
 [node name="Shadow" type="Polygon2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(3, 7)
 polygon = PackedVector2Array(-54, -20, 54, -20, 42, 24, -42, 24)
 color = Color(0.08, 0.04, 0.01, 0.35)
 
 [node name="BowlBody" type="Polygon2D" parent="."]
+unique_name_in_owner = true
 polygon = PackedVector2Array(-58, -24, 58, -24, 44, 24, -44, 24)
 color = Color(0.92, 0.9, 0.82, 1)
 
@@ -32,8 +34,9 @@ color = Color(1, 0.72, 0.14, 1)
 [node name="SoupSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 visible = false
-position = Vector2(0, -8)
-scale = Vector2(0.08, 0.08)
+position = Vector2(0, -4)
+z_index = 4
+scale = Vector2(0.09375, 0.09375)
 
 [node name="BowlLabel" type="Label" parent="."]
 unique_name_in_owner = true
