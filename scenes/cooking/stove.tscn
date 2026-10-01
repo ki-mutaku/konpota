@@ -1,48 +1,48 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://lkroctmrhhsj"]
 
-[ext_resource type="Script" path="res://scripts/cooking/stove.gd" id="1_stove"]
+[ext_resource type="Script" uid="uid://d4l1bs4jn3s8b" path="res://scripts/cooking/stove.gd" id="1_stove"]
+[ext_resource type="AudioStream" uid="uid://dm1s1p3ow833e" path="res://assets/audio/ignite_gas_stove.mp3" id="2_ignition"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_knob"]
 radius = 42.0
 
-[node name="Stove" type="Node2D"]
+[node name="Stove" type="Node2D" unique_id=1232927468]
 unique_name_in_owner = true
 script = ExtResource("1_stove")
 
-[node name="Body" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-118, -74, 118, -74, 118, 92, -118, 92)
+[node name="Body" type="Polygon2D" parent="." unique_id=89715281]
 color = Color(0.22, 0.24, 0.27, 1)
+polygon = PackedVector2Array(-118, -74, 118, -74, 118, 92, -118, 92)
 
-[node name="Burner" type="Polygon2D" parent="."]
+[node name="Burner" type="Polygon2D" parent="." unique_id=1736358645]
 position = Vector2(0, -28)
-polygon = PackedVector2Array(-72, -32, 72, -32, 88, 0, 72, 32, -72, 32, -88, 0)
 color = Color(0.08, 0.09, 0.1, 1)
+polygon = PackedVector2Array(-72, -32, 72, -32, 88, 0, 72, 32, -72, 32, -88, 0)
 
-[node name="Flame" type="Polygon2D" parent="."]
+[node name="Flame" type="Polygon2D" parent="." unique_id=989147620]
 unique_name_in_owner = true
 position = Vector2(0, -30)
-polygon = PackedVector2Array(-36, 28, -26, -18, -8, 6, 0, -38, 12, 4, 28, -20, 38, 28)
 color = Color(1, 0.42, 0.06, 1)
+polygon = PackedVector2Array(-36, 28, -26, -18, -8, 6, 0, -38, 12, 4, 28, -20, 38, 28)
 
-[node name="Knob" type="Polygon2D" parent="."]
+[node name="Knob" type="Polygon2D" parent="." unique_id=1048628916]
 unique_name_in_owner = true
 position = Vector2(0, 57)
-polygon = PackedVector2Array(-34, -28, 34, -28, 40, 0, 34, 28, -34, 28, -40, 0)
 color = Color(0.82, 0.84, 0.86, 1)
+polygon = PackedVector2Array(-34, -28, 34, -28, 40, 0, 34, 28, -34, 28, -40, 0)
 
-[node name="Indicator" type="Polygon2D" parent="Knob"]
+[node name="Indicator" type="Polygon2D" parent="Knob" unique_id=761370569]
 position = Vector2(0, -20)
-polygon = PackedVector2Array(-4, -14, 4, -14, 4, 4, -4, 4)
 color = Color(0.12, 0.12, 0.12, 1)
+polygon = PackedVector2Array(-4, -14, 4, -14, 4, 4, -4, 4)
 
-[node name="KnobArea" type="Area2D" parent="."]
+[node name="KnobArea" type="Area2D" parent="." unique_id=2038463966]
 position = Vector2(0, 57)
-input_pickable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="KnobArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KnobArea" unique_id=279595465]
 shape = SubResource("CircleShape_knob")
 
-[node name="PowerLabel" type="Label" parent="."]
+[node name="PowerLabel" type="Label" parent="." unique_id=2055118832]
 unique_name_in_owner = true
 offset_left = -70.0
 offset_top = 102.0
@@ -52,5 +52,8 @@ theme_override_colors/font_color = Color(0.16, 0.1, 0.04, 1)
 theme_override_font_sizes/font_size = 18
 text = "火力 0%"
 horizontal_alignment = 1
+
+[node name="IgnitionSound" type="AudioStreamPlayer" parent="." unique_id=320116360]
+stream = ExtResource("2_ignition")
 
 [connection signal="input_event" from="KnobArea" to="." method="_on_knob_input_event"]

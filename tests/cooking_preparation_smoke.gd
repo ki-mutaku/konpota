@@ -60,6 +60,10 @@ func _run_smoke_test() -> void:
 	assert(mixer.output_item.processing_state == &"paste")
 	assert(pot_target.accepts(mixer.output_item), "Corn paste should be accepted by the pot")
 
+	board.reset_state()
+	mixer.reset_state()
+	# Allow the audio server to release stopped SE playback before shutdown.
+	await create_timer(0.5).timeout
 	print("Cooking preparation smoke test passed")
 	quit(0)
 

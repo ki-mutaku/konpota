@@ -31,9 +31,16 @@ var _cook_generation: int = 0
 @onready var ingredient_drop_area: DirectDropTarget = $IngredientDropArea
 @onready var bowl_drop_area: DirectDropTarget = %BowlDropArea
 @onready var pot_state_sprite: Sprite2D = %PotStateSprite
+@onready var cooking_sound: AudioStreamPlayer = $CookingSound
+@onready var cooking_success_sound: AudioStreamPlayer = $CookingSuccessSound
+@onready var cooking_failed_sound: AudioStreamPlayer = $CookingFailedSound
 
 
 func _ready() -> void:
+	# Keep looping local to this pot instead of changing the shared audio resource.
+	var cooking_stream: AudioStreamMP3 = cooking_sound.stream.duplicate() as AudioStreamMP3
+	cooking_stream.loop = true
+	cooking_sound.stream = cooking_stream
 	_refresh_visuals()
 
 
@@ -111,6 +118,9 @@ func clear() -> void:
 
 
 func reset_state() -> void:
+	cooking_sound.stop()
+	cooking_success_sound.stop()
+	cooking_failed_sound.stop()
 	_cook_generation += 1
 	is_cooking = false
 	_cooking_snapshot.clear()
@@ -123,6 +133,8 @@ func start_cooking(recipe_id: StringName, display_name: String) -> bool:
 	if is_cooking or ingredients.is_empty() or not has_ingredient_id(&"corn"):
 		return false
 
+	cooking_success_sound.stop()
+	cooking_failed_sound.stop()
 	is_cooking = true
 	_cook_generation += 1
 	var generation: int = _cook_generation
@@ -130,6 +142,7 @@ func start_cooking(recipe_id: StringName, display_name: String) -> bool:
 	_cooking_snapshot["recipe_id"] = recipe_id
 	_cooking_snapshot["display_name"] = display_name
 	pot_state_sprite.texture = CORN_POT_TEXTURE
+	cooking_sound.play()
 	cooking_started.emit(_cooking_snapshot.duplicate(true))
 	_refresh_visuals()
 	get_tree().create_timer(cook_duration).timeout.connect(
@@ -143,6 +156,7 @@ func _complete_cooking(generation: int) -> void:
 		return
 
 	var completed_soup: Dictionary = _cooking_snapshot.duplicate(true)
+	cooking_sound.stop()
 	is_cooking = false
 	_cooking_snapshot.clear()
 	ingredients.clear()
@@ -150,6 +164,10 @@ func _complete_cooking(generation: int) -> void:
 	pot_state_sprite.texture = WATER_POT_TEXTURE
 	_refresh_visuals()
 	_emit_contents_changed()
+	if StringName(completed_soup["recipe_id"]) == &"konpota_water":
+		cooking_failed_sound.play()
+	else:
+		cooking_success_sound.play()
 	cooking_completed.emit(completed_soup)
 
 

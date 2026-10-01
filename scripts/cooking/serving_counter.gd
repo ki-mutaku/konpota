@@ -9,6 +9,7 @@ signal soup_changed(soup: Variant)
 @onready var counter: Polygon2D = %Counter
 @onready var counter_top: Polygon2D = %CounterTop
 @onready var serving_bowl: ServingBowl = %ServingBowl
+@onready var serve_sound: AudioStreamPlayer = $ServeSound
 
 
 func _ready() -> void:
@@ -27,10 +28,12 @@ func has_soup() -> bool:
 
 
 func reset_state() -> void:
+	serve_sound.stop()
 	serving_bowl.reset_bowl()
 
 
 func _on_soup_delivered(soup: Variant) -> void:
+	serve_sound.play()
 	soup_served.emit(soup)
 
 

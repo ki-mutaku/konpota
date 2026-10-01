@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://c65anepi02in8"]
 
-[ext_resource type="Script" path="res://scripts/cooking/mixer.gd" id="1_mixer"]
-[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
-[ext_resource type="Texture2D" path="res://assets/sprites/utensils/mixer_before.png" id="3_before"]
-[ext_resource type="Texture2D" path="res://assets/sprites/utensils/mixer_after.png" id="4_after"]
-[ext_resource type="Script" path="res://scripts/cooking/direct_draggable_item.gd" id="5_drag"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ingredients/corn_many.png" id="6_corn"]
-[ext_resource type="Texture2D" path="res://assets/sprites/utensils/mixer_vacant.png" id="7_vacant"]
+[ext_resource type="Script" uid="uid://c5ps63vviencw" path="res://scripts/cooking/mixer.gd" id="1_mixer"]
+[ext_resource type="Script" uid="uid://dg76pld6hfb5w" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+[ext_resource type="Texture2D" uid="uid://b7j0ko0bidgka" path="res://assets/sprites/utensils/mixer_before.png" id="3_before"]
+[ext_resource type="Texture2D" uid="uid://bfpwrmpjaijvh" path="res://assets/sprites/utensils/mixer_after.png" id="4_after"]
+[ext_resource type="Script" uid="uid://b8wwx2lo57unc" path="res://scripts/cooking/direct_draggable_item.gd" id="5_drag"]
+[ext_resource type="Texture2D" uid="uid://w6xtw75y32qp" path="res://assets/sprites/ingredients/corn_many.png" id="6_corn"]
+[ext_resource type="Texture2D" uid="uid://dulleluou3nps" path="res://assets/sprites/utensils/mixer_vacant.png" id="7_vacant"]
+[ext_resource type="AudioStream" uid="uid://cxtqhyoj2fwt0" path="res://assets/audio/mixer_spinning.mp3" id="8_spinning"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_drop"]
 size = Vector2(172, 150)
@@ -14,46 +15,46 @@ size = Vector2(172, 150)
 [sub_resource type="CircleShape2D" id="CircleShape_output"]
 radius = 42.0
 
-[node name="Mixer" type="Node2D"]
+[node name="Mixer" type="Node2D" unique_id=1551926474]
 unique_name_in_owner = true
 script = ExtResource("1_mixer")
 
-[node name="VacantVisual" type="Sprite2D" parent="."]
+[node name="VacantVisual" type="Sprite2D" parent="." unique_id=434617573]
 unique_name_in_owner = true
 scale = Vector2(0.14, 0.14)
 texture = ExtResource("7_vacant")
 
-[node name="BeforeVisual" type="Sprite2D" parent="."]
+[node name="BeforeVisual" type="Sprite2D" parent="." unique_id=1882001400]
 unique_name_in_owner = true
 visible = false
 scale = Vector2(0.14, 0.14)
 texture = ExtResource("3_before")
 
-[node name="AfterVisual" type="Sprite2D" parent="."]
+[node name="AfterVisual" type="Sprite2D" parent="." unique_id=830585516]
 unique_name_in_owner = true
 visible = false
 scale = Vector2(0.14, 0.14)
 texture = ExtResource("4_after")
 
-[node name="Body" type="Polygon2D" parent="."]
+[node name="Body" type="Polygon2D" parent="." unique_id=438565044]
 visible = false
-polygon = PackedVector2Array(-82, -88, 82, -88, 68, 48, -68, 48)
 color = Color(0.68, 0.86, 0.9, 1)
+polygon = PackedVector2Array(-82, -88, 82, -88, 68, 48, -68, 48)
 
-[node name="Lid" type="Polygon2D" parent="."]
+[node name="Lid" type="Polygon2D" parent="." unique_id=693242049]
 visible = false
 position = Vector2(0, -98)
-polygon = PackedVector2Array(-90, -10, 90, -10, 78, 10, -78, 10)
 color = Color(0.25, 0.3, 0.33, 1)
+polygon = PackedVector2Array(-90, -10, 90, -10, 78, 10, -78, 10)
 
-[node name="Blade" type="Polygon2D" parent="."]
+[node name="Blade" type="Polygon2D" parent="." unique_id=2083063199]
 unique_name_in_owner = true
 visible = false
 position = Vector2(0, 8)
-polygon = PackedVector2Array(-54, -8, -10, -8, 0, -46, 10, -8, 54, -8, 54, 8, 10, 8, 0, 46, -10, 8, -54, 8)
 color = Color(0.28, 0.32, 0.35, 1)
+polygon = PackedVector2Array(-54, -8, -10, -8, 0, -46, 10, -8, 54, -8, 54, 8, 10, 8, 0, 46, -10, 8, -54, 8)
 
-[node name="OperationButton" type="Button" parent="."]
+[node name="OperationButton" type="Button" parent="." unique_id=1183418734]
 offset_left = -76.0
 offset_top = 82.0
 offset_right = 76.0
@@ -62,7 +63,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 18
 text = "タップして攪拌"
 
-[node name="StateLabel" type="Label" parent="."]
+[node name="StateLabel" type="Label" parent="." unique_id=1700539784]
 unique_name_in_owner = true
 offset_left = -80.0
 offset_top = 128.0
@@ -73,35 +74,36 @@ theme_override_font_sizes/font_size = 18
 text = "コーンを入れる"
 horizontal_alignment = 1
 
-[node name="IngredientDropArea" type="Area2D" parent="."]
+[node name="IngredientDropArea" type="Area2D" parent="." unique_id=1168937202]
 position = Vector2(0, -24)
 collision_layer = 2
-collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 accepted_payload_ids = Array[StringName]([&"corn"])
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea" unique_id=492543976]
 shape = SubResource("RectangleShape_drop")
 
-[node name="OutputItem" type="Area2D" parent="."]
+[node name="OutputItem" type="Area2D" parent="." unique_id=1110720917]
 unique_name_in_owner = true
 visible = false
-position = Vector2(104, -12)
 z_index = 8
-collision_layer = 1
+position = Vector2(104, -12)
 collision_mask = 2
-input_pickable = true
 script = ExtResource("5_drag")
 processing_state = &"paste"
 accepted_behavior = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="OutputItem"]
+[node name="Sprite2D" type="Sprite2D" parent="OutputItem" unique_id=1228991087]
 scale = Vector2(0.055, 0.055)
 texture = ExtResource("6_corn")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputItem"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutputItem" unique_id=1969692584]
 shape = SubResource("CircleShape_output")
+
+[node name="SpinningSound" type="AudioStreamPlayer" parent="." unique_id=1419966309]
+stream = ExtResource("8_spinning")
+volume_db = -5.0
 
 [connection signal="button_down" from="OperationButton" to="." method="_on_operation_button_button_down"]
 [connection signal="button_up" from="OperationButton" to="." method="_on_operation_button_button_up"]
