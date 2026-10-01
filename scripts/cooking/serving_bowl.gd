@@ -81,15 +81,27 @@ func _infer_recipe_id(snapshot: Dictionary) -> StringName:
 		if data != null:
 			ingredient_ids[StringName(str(data.get("id")))] = true
 
-	if ingredient_ids.has(&"sugar") and ingredient_ids.has(&"milk"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk", &"sugar"]):
 		return &"konpota_sweet"
-	if ingredient_ids.has(&"parsley"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"parsley"]):
 		return &"konpota_fresh"
-	if ingredient_ids.has(&"milk"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"milk"]):
 		return &"konpota_creamy"
-	if ingredient_ids.has(&"butter"):
+	if _matches_ingredients(ingredient_ids, [&"corn", &"butter"]):
 		return &"konpota_normal"
 	return &"konpota_water"
+
+
+func _matches_ingredients(
+	ingredient_ids: Dictionary,
+	expected_ids: Array[StringName],
+) -> bool:
+	if ingredient_ids.size() != expected_ids.size():
+		return false
+	for ingredient_id: StringName in expected_ids:
+		if not ingredient_ids.has(ingredient_id):
+			return false
+	return true
 
 
 func _get_display_name(value: Variant) -> String:

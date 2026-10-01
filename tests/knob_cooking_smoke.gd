@@ -51,6 +51,17 @@ func _assert_recipe_resolution(kitchen: Node2D) -> void:
 		{"ingredients": [&"corn", &"milk", &"sugar"], "expected": &"konpota_sweet"},
 		{"ingredients": [&"corn", &"parsley"], "expected": &"konpota_fresh"},
 		{"ingredients": [&"corn"], "expected": &"konpota_water"},
+		{
+			"ingredients": [
+				&"corn",
+				&"milk",
+				&"butter",
+				&"salt",
+				&"sugar",
+				&"parsley",
+			],
+			"expected": &"konpota_water",
+		},
 	]
 	for test_case: Dictionary in cases:
 		var entries: Array[Dictionary] = []
