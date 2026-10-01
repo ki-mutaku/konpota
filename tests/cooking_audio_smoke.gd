@@ -1,5 +1,7 @@
 extends SceneTree
 
+const CORN_INGREDIENT := preload("res://resources/ingredients/corn.tres")
+
 
 func _init() -> void:
 	call_deferred("_run_smoke_test")
@@ -54,7 +56,7 @@ func _test_cooking() -> void:
 	assert(not sound.playing, "Rejected cooking must remain silent")
 	assert(not success.playing and not failed.playing)
 	pot.cook_duration = 0.01
-	pot.add_ingredient(load("res://resources/ingredients/corn.tres"))
+	pot.add_ingredient(CORN_INGREDIENT)
 	assert(pot.start_cooking(&"konpota_water", "コンポタ"))
 	assert(sound.playing, "Cooking should play the cooking loop")
 	assert(not success.playing and not failed.playing, "Result SE must wait for completion")
@@ -65,7 +67,7 @@ func _test_cooking() -> void:
 	pot.reset_state()
 	assert(not success.playing and not failed.playing, "Reset should stop result SE")
 	pot.cook_duration = 0.01
-	pot.add_ingredient(load("res://resources/ingredients/corn.tres"))
+	pot.add_ingredient(CORN_INGREDIENT)
 	assert(pot.start_cooking(&"konpota_water", "コンポタ"))
 	pot.reset_state()
 	assert(not sound.playing, "Reset should stop cooking audio immediately")
@@ -119,7 +121,7 @@ func _test_mixer() -> void:
 	assert(not sound.playing)
 	button.button_down.emit()
 	assert(not sound.playing, "Empty mixer must remain silent")
-	mixer.add_ingredient(load("res://resources/ingredients/corn.tres"))
+	mixer.add_ingredient(CORN_INGREDIENT)
 	assert(not sound.playing, "Loading corn must not play spinning audio")
 	button.button_down.emit()
 	assert(sound.playing and mixer.pulse_count == 1, "Stir button should play spinning audio")
@@ -139,7 +141,7 @@ func _test_mixer() -> void:
 	button.button_down.emit()
 	assert(not sound.playing, "Processed mixer must remain silent")
 	mixer.reset_state()
-	mixer.add_ingredient(load("res://resources/ingredients/corn.tres"))
+	mixer.add_ingredient(CORN_INGREDIENT)
 	button.button_down.emit()
 	assert(sound.playing)
 	mixer.reset_state()
@@ -193,7 +195,7 @@ func _test_serving() -> void:
 	assert(not target.try_receive(bowl))
 	assert(not sound.playing, "Empty bowls must not play serving audio")
 	var soup: Dictionary = {
-		"ingredients": [{"data": load("res://resources/ingredients/corn.tres"), "amount": 1.0}],
+		"ingredients": [{"data": CORN_INGREDIENT, "amount": 1.0}],
 		"heat_level": 0.5,
 		"stir_distance": 0.0,
 	}
