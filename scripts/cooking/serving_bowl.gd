@@ -33,7 +33,11 @@ func fill_soup(value: Variant) -> bool:
 	soup = value
 	drag_tag = &"soup"
 	var recipe_id: StringName = _get_recipe_id(value)
-	var recipe_texture: Texture2D = RECIPE_TEXTURES.get(recipe_id) as Texture2D
+	var fallback_texture: Texture2D = RECIPE_TEXTURES[&"konpota_water"] as Texture2D
+	var recipe_texture: Texture2D = RECIPE_TEXTURES.get(
+		recipe_id,
+		fallback_texture,
+	) as Texture2D
 	soup_sprite.texture = recipe_texture
 	bowl_label.text = _get_display_name(value)
 	_refresh_visuals()
@@ -61,10 +65,31 @@ func get_interaction_payload() -> Variant:
 
 func _get_recipe_id(value: Variant) -> StringName:
 	if value is SoupData:
-		return value.id
+		return value.id if value.id != &"" else &"konpota_water"
 	if value is Dictionary:
-		return StringName(value.get("recipe_id", ""))
-	return &""
+		var recipe_id: StringName = StringName(value.get("recipe_id", ""))
+		if recipe_id != &"":
+			return recipe_id
+		return _infer_recipe_id(value)
+	return &"konpota_water"
+
+
+func _infer_recipe_id(snapshot: Dictionary) -> StringName:
+	var ingredient_ids: Dictionary = {}
+	for entry: Dictionary in snapshot.get("ingredients", []):
+		var data: Variant = entry.get("data")
+		if data != null:
+			ingredient_ids[StringName(str(data.get("id")))] = true
+
+	if ingredient_ids.has(&"sugar") and ingredient_ids.has(&"milk"):
+		return &"konpota_sweet"
+	if ingredient_ids.has(&"parsley"):
+		return &"konpota_fresh"
+	if ingredient_ids.has(&"milk"):
+		return &"konpota_creamy"
+	if ingredient_ids.has(&"butter"):
+		return &"konpota_normal"
+	return &"konpota_water"
 
 
 func _get_display_name(value: Variant) -> String:
