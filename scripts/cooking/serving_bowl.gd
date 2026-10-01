@@ -101,12 +101,13 @@ func _get_display_name(value: Variant) -> String:
 
 
 func _refresh_visuals() -> void:
+	var has_contents: bool = has_soup()
 	var has_recipe_texture: bool = has_soup() and soup_sprite.texture != null
 	soup_sprite.visible = has_recipe_texture
-	shadow.visible = not has_recipe_texture
-	bowl_body.visible = not has_recipe_texture
-	soup_fill.visible = has_soup() and not has_recipe_texture
-	bowl_label.visible = not has_recipe_texture
+	shadow.visible = has_contents and not has_recipe_texture
+	bowl_body.visible = has_contents and not has_recipe_texture
+	soup_fill.visible = has_contents and not has_recipe_texture
+	bowl_label.visible = has_contents and not has_recipe_texture
 
 
 func reset_bowl() -> void:
