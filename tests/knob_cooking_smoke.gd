@@ -29,6 +29,14 @@ func _run_smoke_test() -> void:
 	var bowl: ServingBowl = counter.get_node("ServingBowl") as ServingBowl
 	var soup: Dictionary = bowl.soup as Dictionary
 	assert(soup.get("recipe_id") == &"konpota_creamy")
+	var soup_sprite: Sprite2D = bowl.get_node("SoupSprite") as Sprite2D
+	var bowl_body: Polygon2D = bowl.get_node("BowlBody") as Polygon2D
+	assert(soup_sprite.texture != null, "Completed soup should select its texture")
+	assert(soup_sprite.visible, "Completed soup texture should be visible")
+	assert(
+		not bowl_body.visible,
+		"Placeholder bowl should be hidden behind the completed soup image",
+	)
 	assert(pot.ingredients.is_empty(), "Pot should be ready for the next batch")
 	print("Knob cooking smoke test passed")
 	quit(0)

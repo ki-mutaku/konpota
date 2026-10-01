@@ -16,6 +16,8 @@ var soup: Variant = null
 
 @onready var soup_fill: Polygon2D = %SoupFill
 @onready var bowl_label: Label = %BowlLabel
+@onready var shadow: Polygon2D = %Shadow
+@onready var bowl_body: Polygon2D = %BowlBody
 @onready var soup_sprite: Sprite2D = %SoupSprite
 
 
@@ -31,10 +33,10 @@ func fill_soup(value: Variant) -> bool:
 	soup = value
 	drag_tag = &"soup"
 	var recipe_id: StringName = _get_recipe_id(value)
-	soup_sprite.texture = RECIPE_TEXTURES.get(recipe_id) as Texture2D
-	soup_sprite.visible = soup_sprite.texture != null
-	soup_fill.visible = not soup_sprite.visible
+	var recipe_texture: Texture2D = RECIPE_TEXTURES.get(recipe_id) as Texture2D
+	soup_sprite.texture = recipe_texture
 	bowl_label.text = _get_display_name(value)
+	_refresh_visuals()
 	soup_changed.emit(soup)
 	return true
 
@@ -43,10 +45,9 @@ func clear_soup() -> void:
 	soup = null
 	drag_tag = &"bowl"
 	if is_node_ready():
-		soup_fill.visible = false
-		soup_sprite.visible = false
 		soup_sprite.texture = null
 		bowl_label.text = "器"
+		_refresh_visuals()
 	soup_changed.emit(soup)
 
 
@@ -72,6 +73,15 @@ func _get_display_name(value: Variant) -> String:
 	if value is Dictionary:
 		return str(value.get("display_name", "コンポタ"))
 	return "コンポタ"
+
+
+func _refresh_visuals() -> void:
+	var has_recipe_texture: bool = has_soup() and soup_sprite.texture != null
+	soup_sprite.visible = has_recipe_texture
+	shadow.visible = not has_recipe_texture
+	bowl_body.visible = not has_recipe_texture
+	soup_fill.visible = has_soup() and not has_recipe_texture
+	bowl_label.visible = not has_recipe_texture
 
 
 func reset_bowl() -> void:
