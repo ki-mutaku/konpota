@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dsrjkga3wfufd"]
 
 [ext_resource type="Script" uid="uid://dtnrxvtel08pa" path="res://scripts/game/kitchen.gd" id="1_kitchen"]
-[ext_resource type="Texture2D" uid="uid://qfq3p28aabl1" path="res://assets/ui/kitchen/kitchen_background.png" id="2_background"]
+[ext_resource type="PackedScene" path="res://scenes/game/backgrounds/stage1_background.tscn" id="2_background"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/stove.tscn" id="3_stove"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/pot.tscn" id="4_pot"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/mixer.tscn" id="5_mixer"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cs5sx03ywjj3n" path="res://scenes/ingredients/salt.tscn" id="13_salt"]
 [ext_resource type="PackedScene" uid="uid://bng0o6h11p6h2" path="res://scenes/ingredients/sugar.tscn" id="14_sugar"]
 [ext_resource type="PackedScene" path="res://scenes/ingredients/parsley.tscn" id="15_parsley"]
+[ext_resource type="PackedScene" path="res://scenes/game/backgrounds/kitchen_bg.tscn" id="16_kitchen_bg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_hud"]
 bg_color = Color(0.21, 0.105, 0.047, 0.94)
@@ -56,13 +57,9 @@ corner_radius_bottom_left = 18
 [node name="Kitchen" type="Node2D" unique_id=657208665]
 script = ExtResource("1_kitchen")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1900201772]
-offset_right = 1280.0
-offset_bottom = 720.0
-mouse_filter = 2
-texture = ExtResource("2_background")
-expand_mode = 1
-stretch_mode = 6
+[node name="Background" parent="." unique_id=1900201772 instance=ExtResource("2_background")]
+
+[node name="KitchenBG" parent="." unique_id=61794158 instance=ExtResource("16_kitchen_bg")]
 
 [node name="DropHighlights" type="Node2D" parent="." unique_id=88399265]
 z_index = 2
@@ -77,8 +74,8 @@ polygon = PackedVector2Array(-102, -54, -78, -92, -28, -108, 28, -108, 78, -92, 
 [node name="MixerDropHighlight" type="Polygon2D" parent="DropHighlights" unique_id=1110135829]
 unique_name_in_owner = true
 visible = false
-position = Vector2(325, 402.4)
-scale = Vector2(0.65, 0.65)
+position = Vector2(239.51, 399.71)
+scale = Vector2(0.73, 0.73)
 color = Color(1, 0.78, 0.12, 0.34)
 polygon = PackedVector2Array(-94, -86, 94, -86, 94, 86, -94, 86)
 
@@ -222,7 +219,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
 theme_override_font_sizes/font_size = 14
-text = "キッチン"
+text = "近所の空き地"
 horizontal_alignment = 1
 
 [node name="SettingsButton" type="Button" parent="UI/HUDMount" unique_id=412594668]
