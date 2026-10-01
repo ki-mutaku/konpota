@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/customers/customer.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/customers/mvp_customer.gd" id="2"]
@@ -12,6 +12,18 @@ region = Rect2(220, 0, 600, 620)
 [sub_resource type="AtlasTexture" id="SmilePortrait"]
 atlas = ExtResource("4")
 region = Rect2(0, 40, 470, 510)
+
+[sub_resource type="StyleBoxFlat" id="OrderBubbleStyle"]
+bg_color = Color(1, 0.97, 0.86, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.25, 0.1, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 
 [node name="MVPCustomer" instance=ExtResource("1")]
 script = ExtResource("2")
@@ -30,6 +42,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Caption" type="Label" parent="."]
+visible = false
 offset_left = -92.0
 offset_top = 52.0
 offset_right = 92.0
@@ -41,3 +54,25 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 18
 text = "器をここへ"
 horizontal_alignment = 1
+
+[node name="OrderBubble" type="PanelContainer" parent="."]
+offset_left = -330.0
+offset_top = -78.0
+offset_right = -82.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("OrderBubbleStyle")
+
+[node name="OrderLabel" type="Label" parent="OrderBubble"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.1, 0.03, 1)
+theme_override_font_sizes/font_size = 19
+text = "普通のがほしい"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Tail" type="Polygon2D" parent="OrderBubble"]
+position = Vector2(254, 74)
+polygon = PackedVector2Array(-10, -12, 20, 0, -10, 14)
+color = Color(1, 0.97, 0.86, 0.98)
