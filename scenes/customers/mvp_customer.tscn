@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/customers/customer.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/customers/mvp_customer.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/customers/mvp/boy_normal.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/customers/mvp/boy_smile.png" id="4"]
+
+[sub_resource type="AtlasTexture" id="NormalPortrait"]
+atlas = ExtResource("3")
+region = Rect2(220, 0, 600, 620)
+
+[sub_resource type="AtlasTexture" id="SmilePortrait"]
+atlas = ExtResource("4")
+region = Rect2(0, 40, 470, 510)
+
+[node name="MVPCustomer" instance=ExtResource("1")]
+script = ExtResource("2")
+single_delivery = true
+require_verdict = true
+normal_texture = SubResource("NormalPortrait")
+smile_texture = SubResource("SmilePortrait")
+
+[node name="Portrait" type="TextureRect" parent="."]
+offset_left = -60.0
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = 50.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Caption" type="Label" parent="."]
+offset_left = -92.0
+offset_top = 52.0
+offset_right = 92.0
+offset_bottom = 78.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.02, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "器をここへ"
+horizontal_alignment = 1

@@ -5,6 +5,11 @@ signal soup_received(payload: Variant)
 signal evaluation_requested(request_id: int, payload: Variant)
 signal evaluation_completed(result: EvaluationResult)
 
+@export var single_delivery: bool = false
+@export var require_verdict: bool = false
+
+var _receiving_enabled: bool = true
+var _has_completed: bool = false
 var _request_sequence: int = 0
 var _pending_request_id: int = 0
 var _notifying_completion: bool = false
@@ -15,8 +20,24 @@ var _notifying_completion: bool = false
 func can_receive_soup(payload: Variant) -> bool:
 	return (
 		not _notifying_completion
+		and _receiving_enabled
+		and not (single_delivery and _has_completed)
 		and _pending_request_id == 0
 		and is_supported_payload(payload)
+	)
+
+
+func set_receiving_enabled(enabled: bool) -> void:
+	_receiving_enabled = enabled
+	_refresh_drop_target()
+
+
+func _refresh_drop_target() -> void:
+	if not is_node_ready():
+		return
+	drop_target.enabled = (
+		_receiving_enabled and _pending_request_id == 0
+		and not _notifying_completion and not (single_delivery and _has_completed)
 	)
 
 
@@ -59,10 +80,13 @@ func _on_drop_target_item_received(payload: Variant, _source: DirectDraggableIte
 func complete_evaluation(request_id: int, result: EvaluationResult) -> bool:
 	if result == null or request_id == 0 or request_id != _pending_request_id:
 		return false
+	if require_verdict and result.verdict == EvaluationResult.Verdict.UNSET:
+		return false
 	_pending_request_id = 0
+	_has_completed = true
 	_notifying_completion = true
 	# Keep receiving disabled during notification to avoid reentrant deliveries.
 	evaluation_completed.emit(result)
 	_notifying_completion = false
-	drop_target.enabled = true
+	_refresh_drop_target()
 	return true
