@@ -20,6 +20,7 @@ var is_processed: bool = false
 @onready var before_visual: Sprite2D = %BeforeVisual
 @onready var after_visual: Sprite2D = %AfterVisual
 @onready var output_item: DirectDraggableItem = %OutputItem
+@onready var spinning_sound: AudioStreamPlayer = $SpinningSound
 
 
 func _process(delta: float) -> void:
@@ -55,6 +56,7 @@ func take_contents() -> Array[Dictionary]:
 func register_pulse() -> void:
 	if contents.is_empty() or is_processed:
 		return
+	spinning_sound.play()
 	is_operating = true
 	operation_started.emit()
 	pulse_count += 1
@@ -66,6 +68,7 @@ func register_pulse() -> void:
 
 
 func reset_state() -> void:
+	spinning_sound.stop()
 	is_operating = false
 	contents.clear()
 	pulse_count = 0

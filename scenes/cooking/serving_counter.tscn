@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/cooking/serving_counter.gd" id="1_counter"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/serving_bowl.tscn" id="2_bowl"]
+[ext_resource type="AudioStream" path="res://assets/audio/serve_konpota.mp3" id="3_serve"]
 
 [node name="ServingCounter" type="Node2D"]
 unique_name_in_owner = true
@@ -19,3 +20,6 @@ polygon = PackedVector2Array(-144, -12, 144, -12, 132, 12, -132, 12)
 color = Color(0.78, 0.53, 0.29, 1)
 
 [node name="ServingBowl" parent="." instance=ExtResource("2_bowl")]
+
+[node name="ServeSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_serve")

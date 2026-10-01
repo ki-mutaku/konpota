@@ -44,6 +44,8 @@ func _run_smoke_test() -> void:
 	counter.reset_state()
 	pot.reset_state()
 	assert(not pot.has_contents(), "Pot should be empty after reset")
+	# Allow the audio server to release stopped SE playback before shutdown.
+	await create_timer(0.5).timeout
 	quit(0)
 
 

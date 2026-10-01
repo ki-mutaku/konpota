@@ -40,6 +40,9 @@ func _run_smoke_test() -> void:
 		"Placeholder bowl should be hidden behind the completed soup image",
 	)
 	assert(pot.ingredients.is_empty(), "Pot should be ready for the next batch")
+	pot.reset_state()
+	# Allow the audio server to release stopped SE playback before shutdown.
+	await create_timer(0.5).timeout
 	print("Knob cooking smoke test passed")
 	quit(0)
 

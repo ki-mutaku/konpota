@@ -1,56 +1,59 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bti8oqwfv73au"]
 
-[ext_resource type="Script" path="res://scripts/cooking/pot.gd" id="1_pot"]
-[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
-[ext_resource type="Texture2D" path="res://assets/sprites/utensils/water-pot-transparent.png" id="3_water_pot"]
+[ext_resource type="Script" uid="uid://cfku5we3vix8d" path="res://scripts/cooking/pot.gd" id="1_pot"]
+[ext_resource type="Script" uid="uid://dg76pld6hfb5w" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+[ext_resource type="Texture2D" uid="uid://bg6a4rbbd2eru" path="res://assets/sprites/utensils/water-pot-transparent.png" id="3_water_pot"]
+[ext_resource type="AudioStream" uid="uid://crfcqcoo14xgc" path="res://assets/audio/cooking_konpota.mp3" id="4_cooking"]
+[ext_resource type="AudioStream" path="res://assets/audio/cooking_success.mp3" id="5_success"]
+[ext_resource type="AudioStream" path="res://assets/audio/cooking_failed.mp3" id="6_failed"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_drop"]
 radius = 96.0
 
-[node name="Pot" type="Node2D"]
+[node name="Pot" type="Node2D" unique_id=1085906885]
 unique_name_in_owner = true
 script = ExtResource("1_pot")
 
-[node name="PotStateSprite" type="Sprite2D" parent="."]
+[node name="PotStateSprite" type="Sprite2D" parent="." unique_id=1103143641]
 unique_name_in_owner = true
 position = Vector2(0, -4)
 scale = Vector2(0.17, 0.17)
 texture = ExtResource("3_water_pot")
 
-[node name="HeatGlow" type="Polygon2D" parent="."]
+[node name="HeatGlow" type="Polygon2D" parent="." unique_id=11031251]
 unique_name_in_owner = true
-position = Vector2(0, 56)
-polygon = PackedVector2Array(-68, -18, 68, -18, 48, 12, -48, 12)
-color = Color(1, 0.25, 0.05, 1)
 modulate = Color(1, 1, 1, 0)
+position = Vector2(0, 56)
+color = Color(1, 0.25, 0.05, 1)
+polygon = PackedVector2Array(-68, -18, 68, -18, 48, 12, -48, 12)
 
-[node name="PotBody" type="Polygon2D" parent="."]
+[node name="PotBody" type="Polygon2D" parent="." unique_id=475266078]
 visible = false
-polygon = PackedVector2Array(-96, -58, 96, -58, 76, 62, -76, 62)
 color = Color(0.27, 0.31, 0.36, 1)
+polygon = PackedVector2Array(-96, -58, 96, -58, 76, 62, -76, 62)
 
-[node name="Rim" type="Polygon2D" parent="."]
+[node name="Rim" type="Polygon2D" parent="." unique_id=631911236]
 visible = false
-polygon = PackedVector2Array(-104, -68, 104, -68, 104, -50, -104, -50)
 color = Color(0.52, 0.58, 0.64, 1)
+polygon = PackedVector2Array(-104, -68, 104, -68, 104, -50, -104, -50)
 
-[node name="SoupSurface" type="Polygon2D" parent="."]
+[node name="SoupSurface" type="Polygon2D" parent="." unique_id=920101990]
 unique_name_in_owner = true
 position = Vector2(0, -48)
-polygon = PackedVector2Array(-88, -14, 88, -14, 82, 14, -82, 14)
 color = Color(0.95, 0.68, 0.16, 1)
+polygon = PackedVector2Array(-88, -14, 88, -14, 82, 14, -82, 14)
 
-[node name="LeftHandle" type="Polygon2D" parent="."]
+[node name="LeftHandle" type="Polygon2D" parent="." unique_id=949796725]
 visible = false
+color = Color(0.18, 0.21, 0.25, 1)
 polygon = PackedVector2Array(-142, -34, -94, -34, -94, -14, -142, -14)
-color = Color(0.18, 0.21, 0.25, 1)
 
-[node name="RightHandle" type="Polygon2D" parent="."]
+[node name="RightHandle" type="Polygon2D" parent="." unique_id=1375976231]
 visible = false
-polygon = PackedVector2Array(94, -34, 142, -34, 142, -14, 94, -14)
 color = Color(0.18, 0.21, 0.25, 1)
+polygon = PackedVector2Array(94, -34, 142, -34, 142, -14, 94, -14)
 
-[node name="StateLabel" type="Label" parent="."]
+[node name="StateLabel" type="Label" parent="." unique_id=1481458811]
 unique_name_in_owner = true
 visible = false
 offset_left = -100.0
@@ -62,9 +65,8 @@ theme_override_font_sizes/font_size = 18
 text = "材料 0 / 混ぜ 0"
 horizontal_alignment = 1
 
-[node name="IngredientDropArea" type="Area2D" parent="."]
+[node name="IngredientDropArea" type="Area2D" parent="." unique_id=359737211]
 collision_layer = 2
-collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 accepted_payload_ids = Array[StringName]([&"corn", &"milk", &"butter", &"salt", &"sugar", &"parsley"])
@@ -74,19 +76,27 @@ required_processing_states = {
 &"parsley": &"cut"
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea" unique_id=1867582295]
 shape = SubResource("CircleShape_drop")
 
-[node name="BowlDropArea" type="Area2D" parent="."]
+[node name="BowlDropArea" type="Area2D" parent="." unique_id=2087189157]
 unique_name_in_owner = true
 collision_layer = 2
-collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 accepted_tag = &"bowl"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BowlDropArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BowlDropArea" unique_id=1804706783]
 shape = SubResource("CircleShape_drop")
+
+[node name="CookingSound" type="AudioStreamPlayer" parent="." unique_id=1010713445]
+stream = ExtResource("4_cooking")
+
+[node name="CookingSuccessSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_success")
+
+[node name="CookingFailedSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_failed")
 
 [connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]
 [connection signal="item_received" from="BowlDropArea" to="." method="_on_bowl_drop_area_item_received"]

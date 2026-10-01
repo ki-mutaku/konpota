@@ -14,6 +14,7 @@ var _swipe_count: int = 0
 
 @onready var ingredient_drop_area: DirectDropTarget = %IngredientDropArea
 @onready var state_label: Label = %StateLabel
+@onready var cut_sound: AudioStreamPlayer = $CutSound
 
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func try_slice_segment(from: Vector2, to: Vector2) -> bool:
 		return false
 
 	_swipe_count += 1
+	cut_sound.play()
 	slice_registered.emit(_ingredient, _swipe_count)
 	if _swipe_count >= required_swipes:
 		_ingredient.mark_processed(&"cut", &"cut")
@@ -49,6 +51,7 @@ func get_current_ingredient() -> DirectDraggableItem:
 
 
 func reset_state() -> void:
+	cut_sound.stop()
 	if _ingredient != null:
 		_ingredient.reset_to_home()
 	_clear_ingredient()

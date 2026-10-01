@@ -14,6 +14,7 @@ var _drag_start_level: float = 0.0
 @onready var knob: Polygon2D = %Knob
 @onready var flame: Polygon2D = %Flame
 @onready var power_label: Label = %PowerLabel
+@onready var ignition_sound: AudioStreamPlayer = $IgnitionSound
 
 
 func _ready() -> void:
@@ -68,12 +69,16 @@ func _end_drag() -> void:
 
 
 func reset_state() -> void:
+	ignition_sound.stop()
 	_end_drag()
 	_set_heat_level(0.0)
 
 
 func _set_heat_level(value: float, emit_change: bool = true) -> void:
+	var previous_level: float = heat_level
 	heat_level = clampf(value, 0.0, 1.0)
+	if emit_change and previous_level == 0.0 and heat_level > 0.0:
+		ignition_sound.play()
 	knob.rotation = lerpf(-2.3, 2.3, heat_level)
 	flame.scale.y = lerpf(0.15, 1.0, heat_level)
 	flame.modulate.a = lerpf(0.15, 1.0, heat_level)
