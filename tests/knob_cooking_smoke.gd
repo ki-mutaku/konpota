@@ -20,8 +20,9 @@ func _run_smoke_test() -> void:
 	pot.add_ingredient(load("res://resources/ingredients/corn.tres"))
 	pot.add_ingredient(load("res://resources/ingredients/milk.tres"))
 
-	stove.cook_requested.emit()
-	assert(pot.is_cooking, "Knob click should start cooking")
+	stove.call("_begin_drag", 0.0, -1)
+	assert(pot.is_cooking, "Knob press should start cooking immediately")
+	stove.call("_end_drag")
 	await create_timer(0.05).timeout
 
 	assert(not pot.is_cooking, "Cooking should finish after the configured duration")
