@@ -4,8 +4,6 @@ extends DirectDraggableItem
 signal soup_delivered(soup: Variant)
 signal soup_changed(soup: Variant)
 
-var soup: Variant = null
-
 const RECIPE_TEXTURES: Dictionary = {
 	&"konpota_normal": preload("res://assets/sprites/recipes/konpota_normal.png"),
 	&"konpota_creamy": preload("res://assets/sprites/recipes/konpota_creamy.png"),
@@ -13,6 +11,8 @@ const RECIPE_TEXTURES: Dictionary = {
 	&"konpota_fresh": preload("res://assets/sprites/recipes/konpota_fresh.png"),
 	&"konpota_water": preload("res://assets/sprites/recipes/konpota_water.png"),
 }
+
+var soup: Variant = null
 
 @onready var soup_fill: Polygon2D = %SoupFill
 @onready var bowl_label: Label = %BowlLabel

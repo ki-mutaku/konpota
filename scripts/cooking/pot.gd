@@ -8,15 +8,15 @@ signal contents_changed(snapshot: Dictionary)
 signal cooking_started(snapshot: Dictionary)
 signal cooking_completed(soup: Dictionary)
 
-@export_range(24.0, 256.0, 1.0) var interaction_radius: float = 92.0
-@export_range(0.1, 30.0, 0.1) var cook_duration: float = 3.0
-
 const WATER_POT_TEXTURE: Texture2D = preload(
 	"res://assets/sprites/utensils/water-pot-transparent.png"
 )
 const CORN_POT_TEXTURE: Texture2D = preload(
 	"res://assets/sprites/utensils/corn-pot-transparent.png"
 )
+
+@export_range(24.0, 256.0, 1.0) var interaction_radius: float = 92.0
+@export_range(0.1, 30.0, 0.1) var cook_duration: float = 3.0
 
 var heat_level: float = 0.0
 var stir_distance: float = 0.0
