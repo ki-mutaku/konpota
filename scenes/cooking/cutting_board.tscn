@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cngisec3gdywj" path="res://scripts/cooking/cutting_board.gd" id="1_board"]
 [ext_resource type="Script" uid="uid://dg76pld6hfb5w" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
 [ext_resource type="AudioStream" uid="uid://db4onjimk7e" path="res://assets/audio/cut_with_knife.mp3" id="3_cut"]
+[ext_resource type="AudioStream" path="res://assets/audio/place_ingredients.mp3" id="4_placement"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_board"]
 size = Vector2(150, 160)
@@ -38,5 +39,8 @@ shape = SubResource("RectangleShape_board")
 
 [node name="CutSound" type="AudioStreamPlayer" parent="." unique_id=358988786]
 stream = ExtResource("3_cut")
+
+[node name="PlacementSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_placement")
 
 [connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]

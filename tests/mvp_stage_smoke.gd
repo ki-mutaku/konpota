@@ -17,6 +17,7 @@ func _run_smoke_test() -> void:
 	await _run_session([true, false, true], 6, false)
 	await _run_session([false, false, false], 0, false)
 	await _run_synchronous_session()
+	await create_timer(0.5).timeout
 	print("MVP stage smoke test passed (3 Customers, satisfaction, HUD, Clear/Uncleared)")
 	quit(0)
 
@@ -33,6 +34,8 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 	assert(manager.customer_limit == 3 and manager.get_total_satisfaction() == 0)
 	assert(customers[0].get_parent().get_parent() == session.kitchen.get_node("Customers"))
 	assert(not session.result_view.visible)
+	assert(session.kitchen.background_music.playing)
+	assert(not session.result_view.stage_clear_sound.playing)
 	assert(session.hud.satisfaction_label.text == "満足度 0 / 9")
 	assert(session.hud.customer_label.text.contains("1/3"))
 	assert(session.kitchen.get_node("UI/HUDMount").visible == false)
@@ -81,6 +84,7 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 			presentation.smile_texture if outcomes[index] else presentation.normal_texture))
 		assert(session.get_current_customer() == null, "No delivery during feedback")
 		assert(not session.result_view.visible, "Show final feedback before Result")
+		assert(not session.result_view.stage_clear_sound.playing, "Clear audio must wait for Result")
 		await presentation.presentation_finished
 		if outcomes[index]:
 			total += 3
@@ -107,6 +111,8 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 	assert(final_result.is_cleared() == cleared)
 	assert(final_result.get_evaluations().size() == 3)
 	assert(session.result_view.visible)
+	assert(not session.kitchen.background_music.playing)
+	assert(session.result_view.stage_clear_sound.playing == cleared)
 	var expected_verdict: String = "ステージクリア" if cleared else "ステージ終了：未クリア"
 	assert(session.result_view.verdict_label.text == expected_verdict)
 	assert(session.result_view.satisfaction_label.text == "最終満足度 %d / 9" % expected_total)
@@ -114,6 +120,7 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 	assert(session.kitchen.process_mode == Node.PROCESS_MODE_DISABLED)
 	for customer: Customer in customers:
 		assert(not customer.visible and not customer.drop_target.enabled)
+	session.result_view.stage_clear_sound.stop()
 	session.queue_free()
 	await process_frame
 
@@ -138,6 +145,9 @@ func _run_synchronous_session() -> void:
 		assert(not customer.drop_target.enabled)
 		await (customer as MVPCustomer).presentation_finished
 	assert(session.stage_manager.get_result().is_cleared())
+	assert(not session.kitchen.background_music.playing)
+	assert(session.result_view.stage_clear_sound.playing)
+	session.result_view.stage_clear_sound.stop()
 	session.queue_free()
 	await process_frame
 

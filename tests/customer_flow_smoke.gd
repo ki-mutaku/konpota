@@ -80,8 +80,10 @@ func _run_smoke_test() -> void:
 	assert(target.enabled)
 	customer.free()
 	bowl.free()
+	pot.reset_state()
 	pot.free()
 	soup.free()
+	await create_timer(0.5).timeout
 	print("Customer flow smoke test passed (no scoring rules)")
 	quit(0)
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/stage_result_view.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/audio/stage_clear.mp3" id="2_clear"]
 
 [node name="ResultView" type="Control"]
 visible = false
@@ -11,6 +12,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="StageClearSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_clear")
 
 [node name="Shade" type="ColorRect" parent="."]
 layout_mode = 1

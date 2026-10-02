@@ -1,23 +1,22 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://byg2xjsyagksl"]
 
-[ext_resource type="Script" path="res://scripts/cooking/knife.gd" id="1_knife"]
-[ext_resource type="Texture2D" path="res://assets/sprites/utensils/knife.png" id="2_texture"]
+[ext_resource type="Script" uid="uid://dvykne8x62drn" path="res://scripts/cooking/knife.gd" id="1_knife"]
+[ext_resource type="Texture2D" uid="uid://dhsre25ww1cxx" path="res://assets/sprites/utensils/knife.png" id="2_texture"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_knife"]
 size = Vector2(145, 46)
 
-[node name="Knife" type="Area2D"]
+[node name="Knife" type="Area2D" unique_id=1220468399]
 unique_name_in_owner = true
 z_index = 6
-collision_layer = 1
 collision_mask = 2
-input_pickable = true
 script = ExtResource("1_knife")
 drag_tag = &"knife"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=522098123]
+rotation = -0.43633232
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_texture")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=18881735]
 shape = SubResource("RectangleShape_knife")

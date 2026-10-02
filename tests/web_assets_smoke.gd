@@ -41,7 +41,9 @@ func _run_smoke_test() -> void:
 		if not font.has_char(character.unicode_at(0)):
 			push_error("UI font missing Japanese glyph: " + character)
 			failed = true
+	(title.get_node("BackgroundMusic") as AudioStreamPlayer).stop()
 	title.free()
+	await create_timer(0.5).timeout
 	if failed:
 		quit(1)
 		return

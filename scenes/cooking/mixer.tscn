@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://w6xtw75y32qp" path="res://assets/sprites/ingredients/corn_many.png" id="6_corn"]
 [ext_resource type="Texture2D" uid="uid://dulleluou3nps" path="res://assets/sprites/utensils/mixer_vacant.png" id="7_vacant"]
 [ext_resource type="AudioStream" uid="uid://cxtqhyoj2fwt0" path="res://assets/audio/mixer_spinning.mp3" id="8_spinning"]
+[ext_resource type="AudioStream" path="res://assets/audio/place_ingredients.mp3" id="9_placement"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape_drop"]
 size = Vector2(172, 150)
@@ -103,7 +104,10 @@ shape = SubResource("CircleShape_output")
 
 [node name="SpinningSound" type="AudioStreamPlayer" parent="." unique_id=1419966309]
 stream = ExtResource("8_spinning")
-volume_db = -5.0
+volume_db = -10.0
+
+[node name="PlacementSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_placement")
 
 [connection signal="button_down" from="OperationButton" to="." method="_on_operation_button_button_down"]
 [connection signal="button_up" from="OperationButton" to="." method="_on_operation_button_button_up"]

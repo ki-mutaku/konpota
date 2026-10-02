@@ -15,6 +15,7 @@ var _swipe_count: int = 0
 @onready var ingredient_drop_area: DirectDropTarget = %IngredientDropArea
 @onready var state_label: Label = %StateLabel
 @onready var cut_sound: AudioStreamPlayer = $CutSound
+@onready var placement_sound: AudioStreamPlayer = $PlacementSound
 
 
 func _ready() -> void:
@@ -52,13 +53,14 @@ func get_current_ingredient() -> DirectDraggableItem:
 
 func reset_state() -> void:
 	cut_sound.stop()
+	placement_sound.stop()
 	if _ingredient != null:
 		_ingredient.reset_to_home()
 	_clear_ingredient()
 
 
 func _on_ingredient_drop_area_item_received(
-	_payload: Variant,
+	payload: Variant,
 	source: DirectDraggableItem,
 ) -> void:
 	_ingredient = source
@@ -67,6 +69,8 @@ func _on_ingredient_drop_area_item_received(
 	source.accepted_behavior = DirectDraggableItem.AcceptedBehavior.STAY
 	source.drag_started.connect(_on_ingredient_drag_started, CONNECT_ONE_SHOT)
 	ingredient_drop_area.enabled = false
+	if payload is IngredientData and payload.id == &"parsley":
+		placement_sound.play()
 	ingredient_placed.emit(source)
 	_refresh_label()
 

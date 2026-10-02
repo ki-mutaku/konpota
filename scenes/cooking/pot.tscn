@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://crfcqcoo14xgc" path="res://assets/audio/cooking_konpota.mp3" id="4_cooking"]
 [ext_resource type="AudioStream" path="res://assets/audio/cooking_success.mp3" id="5_success"]
 [ext_resource type="AudioStream" path="res://assets/audio/cooking_failed.mp3" id="6_failed"]
+[ext_resource type="AudioStream" path="res://assets/audio/put_in_ingredients.mp3" id="7_ingredient"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_drop"]
 radius = 96.0
@@ -97,6 +98,9 @@ stream = ExtResource("5_success")
 
 [node name="CookingFailedSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_failed")
+
+[node name="IngredientSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_ingredient")
 
 [connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]
 [connection signal="item_received" from="BowlDropArea" to="." method="_on_bowl_drop_area_item_received"]

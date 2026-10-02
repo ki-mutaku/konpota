@@ -4,10 +4,10 @@
 [ext_resource type="PackedScene" path="res://scenes/game/backgrounds/stage1_background.tscn" id="2_background"]
 [ext_resource type="PackedScene" uid="uid://lkroctmrhhsj" path="res://scenes/cooking/stove.tscn" id="3_stove"]
 [ext_resource type="PackedScene" uid="uid://bti8oqwfv73au" path="res://scenes/cooking/pot.tscn" id="4_pot"]
-[ext_resource type="PackedScene" path="res://scenes/cooking/mixer.tscn" id="5_mixer"]
+[ext_resource type="PackedScene" uid="uid://c65anepi02in8" path="res://scenes/cooking/mixer.tscn" id="5_mixer"]
 [ext_resource type="PackedScene" path="res://scenes/cooking/serving_counter.tscn" id="7_counter"]
 [ext_resource type="PackedScene" uid="uid://drwrhwbu82hmy" path="res://scenes/cooking/cutting_board.tscn" id="8_board"]
-[ext_resource type="PackedScene" path="res://scenes/cooking/knife.tscn" id="9_knife"]
+[ext_resource type="PackedScene" uid="uid://byg2xjsyagksl" path="res://scenes/cooking/knife.tscn" id="9_knife"]
 [ext_resource type="PackedScene" uid="uid://c82ifn7p5bcet" path="res://scenes/ingredients/corn.tscn" id="10_corn"]
 [ext_resource type="PackedScene" uid="uid://dlywphpgao0u5" path="res://scenes/ingredients/milk.tscn" id="11_milk"]
 [ext_resource type="PackedScene" uid="uid://bypcjuqu320pn" path="res://scenes/ingredients/butter.tscn" id="12_butter"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bng0o6h11p6h2" path="res://scenes/ingredients/sugar.tscn" id="14_sugar"]
 [ext_resource type="PackedScene" path="res://scenes/ingredients/parsley.tscn" id="15_parsley"]
 [ext_resource type="PackedScene" path="res://scenes/game/backgrounds/kitchen_bg.tscn" id="16_kitchen_bg"]
+[ext_resource type="AudioStream" path="res://assets/audio/cooking_scene.mp3" id="17_music"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_hud"]
 bg_color = Color(0.21, 0.105, 0.047, 0.94)
@@ -56,6 +57,11 @@ corner_radius_bottom_left = 18
 
 [node name="Kitchen" type="Node2D" unique_id=657208665]
 script = ExtResource("1_kitchen")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_music")
+volume_db = -12.0
+autoplay = true
 
 [node name="Background" parent="." unique_id=1900201772 instance=ExtResource("2_background")]
 
@@ -101,9 +107,9 @@ position = Vector2(989, 435)
 scale = Vector2(1, 0.95)
 
 [node name="Knife" parent="KitchenObjects" unique_id=56017170 instance=ExtResource("9_knife")]
-position = Vector2(1106, 435)
+position = Vector2(1098.98, 435)
 rotation = 1.5707964
-scale = Vector2(0.45, 0.45)
+scale = Vector2(0.78, 0.78)
 
 [node name="Ingredients" type="Node2D" parent="." unique_id=793361217]
 
