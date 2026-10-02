@@ -25,9 +25,13 @@ func _ready() -> void:
 	kitchen.pot.contents_changed.connect(hud.update_pot_contents)
 	# Replace only the static HUD; A's status panel and cooking remain intact.
 	kitchen.get_node("UI/HUDMount").hide()
+	var order_ids: Array[StringName] = CustomerOrderEvaluator.get_order_ids()
+	order_ids.shuffle()
 	for customer: Customer in customers:
 		customer.set_receiving_enabled(false)
 		var presentation: MVPCustomer = customer as MVPCustomer
+		var customer_index: int = customers.find(customer)
+		presentation.set_order(order_ids[customer_index])
 		presentation.presentation_finished.connect(_on_presentation_finished.bind(customer))
 		stage_manager.connect_customer(customer)
 		customer.evaluation_requested.connect(_on_evaluation_requested.bind(customer))
@@ -54,6 +58,20 @@ func submit_evaluation(customer: Customer, request_id: int, result: EvaluationRe
 func _on_evaluation_requested(request_id: int, payload: Variant, customer: Customer) -> void:
 	hud.show_evaluation_pending()
 	evaluation_requested.emit(customer, request_id, payload)
+	var presentation: MVPCustomer = customer as MVPCustomer
+	var result: EvaluationResult = CustomerOrderEvaluator.evaluate(
+		presentation.order_id,
+		payload,
+	)
+	_complete_evaluation.call_deferred(customer, request_id, result)
+
+
+func _complete_evaluation(
+	customer: Customer,
+	request_id: int,
+	result: EvaluationResult,
+) -> void:
+	submit_evaluation(customer, request_id, result)
 
 
 func _on_progress_changed(total: int, completed: int) -> void:

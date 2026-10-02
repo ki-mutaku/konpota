@@ -10,8 +10,7 @@ signal stage_finished(result: StageResult)
 enum State { READY, PLAYING, FINISHED }
 
 const MVP_CUSTOMER_COUNT: int = 3
-const TARGET_SATISFACTION: int = 9
-const SUCCESS_SATISFACTION: int = 3
+const TARGET_SATISFACTION: int = 12
 
 # Zero preserves the foundation's explicit finish/timer interface.
 @export_range(0, 3) var customer_limit: int = 0
@@ -79,8 +78,7 @@ func receive_evaluation(result: EvaluationResult) -> bool:
 		if result.verdict == EvaluationResult.Verdict.UNSET or _evaluations.size() >= customer_limit:
 			return false
 	_evaluations.append(result)
-	if result.verdict == EvaluationResult.Verdict.SUCCESS:
-		_total_satisfaction += SUCCESS_SATISFACTION
+	_total_satisfaction += result.satisfaction
 	_notifying_evaluation = true
 	evaluation_received.emit(result)
 	progress_changed.emit(_total_satisfaction, _evaluations.size())
