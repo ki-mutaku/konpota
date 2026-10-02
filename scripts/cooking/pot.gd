@@ -34,6 +34,7 @@ var _cook_generation: int = 0
 @onready var cooking_sound: AudioStreamPlayer = $CookingSound
 @onready var cooking_success_sound: AudioStreamPlayer = $CookingSuccessSound
 @onready var cooking_failed_sound: AudioStreamPlayer = $CookingFailedSound
+@onready var ingredient_sound: AudioStreamPlayer = $IngredientSound
 
 
 func _ready() -> void:
@@ -49,6 +50,7 @@ func add_ingredient(ingredient: Variant, amount: float = 1.0) -> void:
 		return
 
 	ingredients.append({"data": ingredient, "amount": amount})
+	ingredient_sound.play()
 	ingredient_added.emit(ingredient, amount)
 	_refresh_visuals()
 	_emit_contents_changed()
@@ -143,6 +145,7 @@ func reset_state() -> void:
 	cooking_sound.stop()
 	cooking_success_sound.stop()
 	cooking_failed_sound.stop()
+	ingredient_sound.stop()
 	_cook_generation += 1
 	is_cooking = false
 	_cooking_snapshot.clear()

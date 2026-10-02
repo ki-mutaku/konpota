@@ -107,6 +107,7 @@ func _on_presentation_finished(customer: Customer) -> void:
 
 func _on_result_received(result: StageResult) -> void:
 	_pending_result = result
+	kitchen.stop_background_music()
 	kitchen.process_mode = Node.PROCESS_MODE_DISABLED
 	if _feedback_customer == null:
 		_show_result(result)

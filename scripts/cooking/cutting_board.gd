@@ -7,14 +7,15 @@ signal ingredient_processed(item: DirectDraggableItem)
 
 @export_range(1, 10, 1) var required_swipes: int = 1
 @export_range(8.0, 160.0, 1.0) var minimum_downward_distance: float = 48.0
-@export_range(16.0, 160.0, 1.0) var cutting_radius: float = 72.0
 
 var _ingredient: DirectDraggableItem
 var _swipe_count: int = 0
+var _slice_segment: SegmentShape2D = SegmentShape2D.new()
 
 @onready var ingredient_drop_area: DirectDropTarget = %IngredientDropArea
 @onready var state_label: Label = %StateLabel
 @onready var cut_sound: AudioStreamPlayer = $CutSound
+@onready var placement_sound: AudioStreamPlayer = $PlacementSound
 
 
 func _ready() -> void:
@@ -22,18 +23,19 @@ func _ready() -> void:
 	_refresh_label()
 
 
-func try_slice_segment(from: Vector2, to: Vector2) -> bool:
+func try_slice_segment(
+	from: Vector2,
+	to: Vector2,
+	downward_distance: float = -1.0,
+) -> bool:
 	if _ingredient == null or _ingredient.processing_state == &"cut":
 		return false
-	if to.y - from.y < minimum_downward_distance:
+	var segment_distance: float = to.y - from.y
+	if segment_distance <= 0.0:
 		return false
-
-	var closest: Vector2 = Geometry2D.get_closest_point_to_segment(
-		_ingredient.global_position,
-		from,
-		to,
-	)
-	if closest.distance_to(_ingredient.global_position) > cutting_radius:
+	# Accumulate small drag steps without replacing the real path with a start-to-end chord.
+	var swipe_distance: float = segment_distance if downward_distance < 0.0 else downward_distance
+	if swipe_distance < minimum_downward_distance or not _crosses_ingredient(from, to):
 		return false
 
 	_swipe_count += 1
@@ -46,19 +48,37 @@ func try_slice_segment(from: Vector2, to: Vector2) -> bool:
 	return true
 
 
+func _crosses_ingredient(from: Vector2, to: Vector2) -> bool:
+	_slice_segment.a = from
+	_slice_segment.b = to
+	# Use the ingredient's actual shapes, including their offsets, rotations and scale.
+	for owner_id: int in _ingredient.get_shape_owners():
+		if _ingredient.is_shape_owner_disabled(owner_id):
+			continue
+		var shape_transform: Transform2D = (
+			_ingredient.global_transform * _ingredient.shape_owner_get_transform(owner_id)
+		)
+		for shape_index: int in _ingredient.shape_owner_get_shape_count(owner_id):
+			var shape: Shape2D = _ingredient.shape_owner_get_shape(owner_id, shape_index)
+			if shape.collide(shape_transform, _slice_segment, Transform2D.IDENTITY):
+				return true
+	return false
+
+
 func get_current_ingredient() -> DirectDraggableItem:
 	return _ingredient
 
 
 func reset_state() -> void:
 	cut_sound.stop()
+	placement_sound.stop()
 	if _ingredient != null:
 		_ingredient.reset_to_home()
 	_clear_ingredient()
 
 
 func _on_ingredient_drop_area_item_received(
-	_payload: Variant,
+	payload: Variant,
 	source: DirectDraggableItem,
 ) -> void:
 	_ingredient = source
@@ -67,6 +87,8 @@ func _on_ingredient_drop_area_item_received(
 	source.accepted_behavior = DirectDraggableItem.AcceptedBehavior.STAY
 	source.drag_started.connect(_on_ingredient_drag_started, CONNECT_ONE_SHOT)
 	ingredient_drop_area.enabled = false
+	if payload is IngredientData and payload.id == &"parsley":
+		placement_sound.play()
 	ingredient_placed.emit(source)
 	_refresh_label()
 

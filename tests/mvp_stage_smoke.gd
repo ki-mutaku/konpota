@@ -17,6 +17,7 @@ func _run_smoke_test() -> void:
 	await _run_session([true, false, true], 8, false)
 	await _run_session([false, false, false], 0, false)
 	await _run_synchronous_session()
+	await create_timer(0.5).timeout
 	print("MVP stage smoke test passed (3 Customers, satisfaction, HUD, Clear/Uncleared)")
 	quit(0)
 
@@ -89,6 +90,7 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 		)
 		assert(session.get_current_customer() == null, "No delivery during feedback")
 		assert(not session.result_view.visible, "Show final feedback before Result")
+		assert(not session.result_view.stage_clear_sound.playing, "Clear audio must wait for Result")
 		await presentation.presentation_finished
 		if outcomes[index]:
 			total += 4
@@ -115,6 +117,8 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 	assert(final_result.is_cleared() == cleared)
 	assert(final_result.get_evaluations().size() == 3)
 	assert(session.result_view.visible)
+	assert(not session.kitchen.background_music.playing)
+	assert(session.result_view.stage_clear_sound.playing == cleared)
 	var expected_verdict: String = "ステージクリア" if cleared else "ステージ終了：未クリア"
 	assert(session.result_view.verdict_label.text == expected_verdict)
 	assert(session.result_view.satisfaction_label.text == "最終満足度 %d / 12" % expected_total)
@@ -122,6 +126,7 @@ func _run_session(outcomes: Array[bool], expected_total: int, cleared: bool) -> 
 	assert(session.kitchen.process_mode == Node.PROCESS_MODE_DISABLED)
 	for customer: Customer in customers:
 		assert(not customer.visible and not customer.drop_target.enabled)
+	session.result_view.stage_clear_sound.stop()
 	session.queue_free()
 	await process_frame
 
@@ -147,6 +152,9 @@ func _run_synchronous_session() -> void:
 		assert(not customer.drop_target.enabled)
 		await presentation.presentation_finished
 	assert(session.stage_manager.get_result().is_cleared())
+	assert(not session.kitchen.background_music.playing)
+	assert(session.result_view.stage_clear_sound.playing)
+	session.result_view.stage_clear_sound.stop()
 	session.queue_free()
 	await process_frame
 

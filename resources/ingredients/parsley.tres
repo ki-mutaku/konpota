@@ -1,12 +1,8 @@
-[gd_resource type="Resource" script_class="IngredientData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="IngredientData" format=3 uid="uid://5s32oyepmjhp"]
 
-[ext_resource type="Script" path="res://scripts/ingredients/ingredient_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://dm7086otbq6j6" path="res://scripts/ingredients/ingredient_data.gd" id="1_data"]
 
 [resource]
 script = ExtResource("1_data")
 id = &"parsley"
 display_name = "パセリ"
-sweetness = 0.0
-thickness = 0.0
-richness = 0.0
-flavor = 8.0
