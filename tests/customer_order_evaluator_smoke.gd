@@ -52,6 +52,17 @@ func _run_smoke_test() -> void:
 	assert(EVALUATOR.evaluate(&"konpota_creamy", cached).satisfaction == 4)
 	var quantity: Dictionary = _make_payload([&"corn", &"milk"], 2)
 	assert(EVALUATOR.evaluate(&"konpota_creamy", quantity).satisfaction == 4)
+	var matching_recipe_with_stale_stats: Dictionary = {
+		"recipe_id": &"konpota_sweet",
+		"sweetness": 0.0,
+		"thickness": 0.0,
+		"richness": 0.0,
+		"flavor": 0.0,
+	}
+	var matching_result: EvaluationResult = EVALUATOR.evaluate(
+		&"konpota_sweet", matching_recipe_with_stale_stats)
+	assert(matching_result.satisfaction == 4)
+	assert(matching_result.verdict == EvaluationResult.Verdict.SUCCESS)
 	await create_timer(0.5).timeout
 	print("Customer order evaluator smoke test passed (4 axes, 0-4 points, amount, metadata)")
 	quit()
