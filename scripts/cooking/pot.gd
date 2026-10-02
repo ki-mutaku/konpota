@@ -94,11 +94,33 @@ func has_ingredient_id(ingredient_id: StringName) -> bool:
 
 
 func get_soup_snapshot() -> Dictionary:
-	return {
+	var snapshot: Dictionary = {
 		"ingredients": ingredients.duplicate(true),
 		"heat_level": heat_level,
 		"stir_distance": stir_distance,
 	}
+	snapshot.merge(_calculate_ingredient_totals())
+	return snapshot
+
+
+func _calculate_ingredient_totals() -> Dictionary:
+	var totals: Dictionary = {
+		"sweetness": 0.0,
+		"thickness": 0.0,
+		"richness": 0.0,
+		"flavor": 0.0,
+	}
+	for entry: Dictionary in ingredients:
+		var data: Variant = entry.get("data")
+		if not data is IngredientData:
+			continue
+		var ingredient: IngredientData = data as IngredientData
+		var amount: float = float(entry.get("amount", 1.0))
+		totals["sweetness"] += ingredient.sweetness * amount
+		totals["thickness"] += ingredient.thickness * amount
+		totals["richness"] += ingredient.richness * amount
+		totals["flavor"] += ingredient.flavor * amount
+	return totals
 
 
 func take_soup_snapshot() -> Dictionary:
