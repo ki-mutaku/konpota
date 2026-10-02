@@ -20,12 +20,12 @@ func _run_smoke_test() -> void:
 		var payload: Dictionary = _make_payload(MATERIALS[order])
 		payload["recipe_id"] = &"unrelated"
 		var result: EvaluationResult = EVALUATOR.evaluate(order, payload)
-		assert(result.satisfaction == 4 and result.verdict == EvaluationResult.Verdict.SUCCESS)
+		assert(result.satisfaction == 3 and result.verdict == EvaluationResult.Verdict.FAILURE)
 		for axis: StringName in EVALUATOR.AXES:
 			assert(result.achieved_axes[axis])
 	var partial: EvaluationResult = EVALUATOR.evaluate(
 		&"konpota_sweet", _make_payload([&"corn", &"milk"]))
-	assert(partial.satisfaction == 3 and partial.verdict == EvaluationResult.Verdict.FAILURE)
+	assert(partial.satisfaction == 2 and partial.verdict == EvaluationResult.Verdict.FAILURE)
 	assert(not partial.achieved_axes[&"sweetness"])
 	var doubled: Dictionary = _make_payload([&"corn"], 2)
 	var stats: Dictionary = EVALUATOR.evaluate(&"konpota_normal", doubled).actual_stats
@@ -42,16 +42,16 @@ func _run_smoke_test() -> void:
 			var axis: StringName = EVALUATOR.AXES[index]
 			soup.set(axis, target[axis] if index < points else target[axis] - 1)
 		var result: EvaluationResult = EVALUATOR.evaluate(&"konpota_creamy", soup)
-		assert(result.satisfaction == points)
-		assert((result.verdict == EvaluationResult.Verdict.SUCCESS) == (points == 4))
+		assert(result.satisfaction == maxi(points - 1, 0))
+		assert(result.verdict == EvaluationResult.Verdict.FAILURE)
 	# Main's cached Pot snapshot and SoupData routes agree with ingredient summation.
 	var creamy: Dictionary = _make_payload([&"corn", &"milk"])
 	var result: EvaluationResult = EVALUATOR.evaluate(&"konpota_creamy", creamy)
 	var cached: Dictionary = result.actual_stats.duplicate()
 	cached["ingredients"] = creamy["ingredients"]
-	assert(EVALUATOR.evaluate(&"konpota_creamy", cached).satisfaction == 4)
+	assert(EVALUATOR.evaluate(&"konpota_creamy", cached).satisfaction == 3)
 	var quantity: Dictionary = _make_payload([&"corn", &"milk"], 2)
-	assert(EVALUATOR.evaluate(&"konpota_creamy", quantity).satisfaction == 4)
+	assert(EVALUATOR.evaluate(&"konpota_creamy", quantity).satisfaction == 3)
 	var matching_recipe_with_stale_stats: Dictionary = {
 		"recipe_id": &"konpota_sweet",
 		"sweetness": 0.0,

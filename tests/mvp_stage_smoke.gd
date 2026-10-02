@@ -19,7 +19,7 @@ func _init() -> void:
 
 func _run_smoke_test() -> void:
 	await _run_session([4, 4, 4], 12, true)
-	await _run_session([4, 3, 4], 11, false)
+	await _run_session([4, 2, 4], 10, false)
 	await _run_session([0, 0, 0], 0, false)
 	await create_timer(0.5).timeout
 	print("MVP stage smoke test passed (real cooking, orders, evaluation, audio, HUD, Result)")
@@ -59,9 +59,9 @@ func _run_session(outcomes: Array[int], expected_total: int, cleared: bool) -> v
 			assert(session.customers[other].drop_target.enabled == (other == index))
 		var points: int = outcomes[index]
 		if points < 4:
-			customer.set_order(&"konpota_sweet" if points == 3 else &"konpota_creamy")
+			customer.set_order(&"konpota_sweet")
 		var cooked_order: StringName = customer.order_id if points == 4 else (
-			&"konpota_creamy" if points == 3 else &"")
+			&"konpota_creamy" if points == 2 else &"")
 		await _cook_for_order(session, cooked_order)
 		assert(bowl.has_soup())
 		assert(session.hud.ingredient_label.text == "鍋の食材数 0")

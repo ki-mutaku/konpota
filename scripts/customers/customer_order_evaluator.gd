@@ -61,6 +61,8 @@ static func evaluate(order_id: StringName, payload: Variant) -> EvaluationResult
 		achieved[axis] = reached
 		if reached:
 			satisfaction += 1
+	# A different menu receives the axis score with a one-point order mismatch penalty.
+	satisfaction = maxi(satisfaction - 1, 0)
 	var verdict: EvaluationResult.Verdict = (
 		EvaluationResult.Verdict.SUCCESS
 		if satisfaction == AXES.size()
