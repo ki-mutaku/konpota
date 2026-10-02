@@ -43,6 +43,7 @@ customer_limit = 3
 script = ExtResource("4_receiver")
 
 [node name="CustomerRoster" type="Node2D" parent="."]
+process_mode = 3
 position = Vector2(1100, 143)
 
 [node name="Customer1" parent="CustomerRoster" instance=ExtResource("5_customer")]

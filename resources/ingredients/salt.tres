@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="IngredientData" format=3 uid="uid://tx3x3h53vnch"]
+[gd_resource type="Resource" script_class="IngredientData" load_steps=2 format=3]
 
-[ext_resource type="Script" uid="uid://dm7086otbq6j6" path="res://scripts/ingredients/ingredient_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://scripts/ingredients/ingredient_data.gd" id="1_data"]
 
 [resource]
 script = ExtResource("1_data")
 id = &"salt"
 display_name = "塩"
 sweetness = -1.0
+thickness = 0.0
 richness = 2.0
+flavor = 1.0
