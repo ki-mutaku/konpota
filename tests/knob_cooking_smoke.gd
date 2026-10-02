@@ -41,6 +41,7 @@ func _run_smoke_test() -> void:
 	)
 	assert(pot.ingredients.is_empty(), "Pot should be ready for the next batch")
 	pot.reset_state()
+	kitchen.stop_background_music()
 	# Allow the audio server to release stopped SE playback before shutdown.
 	await create_timer(0.5).timeout
 	print("Knob cooking smoke test passed")

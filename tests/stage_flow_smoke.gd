@@ -101,6 +101,7 @@ func _run_smoke_test() -> void:
 	bowl.free()
 	timed.free()
 	timer.free()
+	await create_timer(0.5).timeout
 	print("Stage flow smoke test passed (Title, Customer, Timer, Result handoff)")
 	quit(0)
 

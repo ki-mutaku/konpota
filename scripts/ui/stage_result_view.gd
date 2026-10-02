@@ -3,6 +3,7 @@ extends Control
 
 @onready var verdict_label: Label = $Panel/Content/Verdict
 @onready var satisfaction_label: Label = $Panel/Content/Satisfaction
+@onready var stage_clear_sound: AudioStreamPlayer = $StageClearSound
 
 
 func show_result(result: StageResult) -> void:
@@ -11,3 +12,6 @@ func show_result(result: StageResult) -> void:
 		result.get_total_satisfaction(), result.get_target_satisfaction(),
 	]
 	show()
+	stage_clear_sound.stop()
+	if result.is_cleared():
+		stage_clear_sound.play()

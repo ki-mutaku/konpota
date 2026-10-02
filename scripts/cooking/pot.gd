@@ -34,6 +34,7 @@ var _cook_generation: int = 0
 @onready var cooking_sound: AudioStreamPlayer = $CookingSound
 @onready var cooking_success_sound: AudioStreamPlayer = $CookingSuccessSound
 @onready var cooking_failed_sound: AudioStreamPlayer = $CookingFailedSound
+@onready var ingredient_sound: AudioStreamPlayer = $IngredientSound
 
 
 func _ready() -> void:
@@ -49,6 +50,7 @@ func add_ingredient(ingredient: Variant, amount: float = 1.0) -> void:
 		return
 
 	ingredients.append({"data": ingredient, "amount": amount})
+	ingredient_sound.play()
 	ingredient_added.emit(ingredient, amount)
 	_refresh_visuals()
 	_emit_contents_changed()
@@ -92,11 +94,33 @@ func has_ingredient_id(ingredient_id: StringName) -> bool:
 
 
 func get_soup_snapshot() -> Dictionary:
-	return {
+	var snapshot: Dictionary = {
 		"ingredients": ingredients.duplicate(true),
 		"heat_level": heat_level,
 		"stir_distance": stir_distance,
 	}
+	snapshot.merge(_calculate_ingredient_totals())
+	return snapshot
+
+
+func _calculate_ingredient_totals() -> Dictionary:
+	var totals: Dictionary = {
+		"sweetness": 0.0,
+		"thickness": 0.0,
+		"richness": 0.0,
+		"flavor": 0.0,
+	}
+	for entry: Dictionary in ingredients:
+		var data: Variant = entry.get("data")
+		if not data is IngredientData:
+			continue
+		var ingredient: IngredientData = data as IngredientData
+		var amount: float = float(entry.get("amount", 1.0))
+		totals["sweetness"] += ingredient.sweetness * amount
+		totals["thickness"] += ingredient.thickness * amount
+		totals["richness"] += ingredient.richness * amount
+		totals["flavor"] += ingredient.flavor * amount
+	return totals
 
 
 func take_soup_snapshot() -> Dictionary:
@@ -121,6 +145,7 @@ func reset_state() -> void:
 	cooking_sound.stop()
 	cooking_success_sound.stop()
 	cooking_failed_sound.stop()
+	ingredient_sound.stop()
 	_cook_generation += 1
 	is_cooking = false
 	_cooking_snapshot.clear()

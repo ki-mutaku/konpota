@@ -21,6 +21,7 @@ var is_processed: bool = false
 @onready var after_visual: Sprite2D = %AfterVisual
 @onready var output_item: DirectDraggableItem = %OutputItem
 @onready var spinning_sound: AudioStreamPlayer = $SpinningSound
+@onready var placement_sound: AudioStreamPlayer = $PlacementSound
 
 
 func _process(delta: float) -> void:
@@ -41,6 +42,8 @@ func add_ingredient(ingredient: Variant, amount: float = 1.0) -> void:
 	contents.append({"data": ingredient, "amount": amount})
 	pulse_count = 0
 	is_processed = false
+	if ingredient is IngredientData and ingredient.id == &"corn":
+		placement_sound.play()
 	contents_changed.emit(contents.duplicate(true))
 	_refresh_visuals()
 
@@ -69,6 +72,7 @@ func register_pulse() -> void:
 
 func reset_state() -> void:
 	spinning_sound.stop()
+	placement_sound.stop()
 	is_operating = false
 	contents.clear()
 	pulse_count = 0
