@@ -21,7 +21,7 @@ text = "Stage: MVP"
 
 [node name="Satisfaction" type="Label" parent="Content"]
 layout_mode = 2
-text = "満足度 0 / 9"
+text = "満足度 0 / 12"
 
 [node name="CustomerProgress" type="Label" parent="Content"]
 layout_mode = 2

@@ -10,7 +10,7 @@ var _cleared: bool
 func _init(
 	evaluations: Array[EvaluationResult] = [],
 	total_satisfaction: int = 0,
-	target_satisfaction: int = 9,
+	target_satisfaction: int = 12,
 	cleared: bool = false,
 ) -> void:
 	_evaluations.assign(evaluations)

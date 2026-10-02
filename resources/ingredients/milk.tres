@@ -6,3 +6,7 @@
 script = ExtResource("1_data")
 id = &"milk"
 display_name = "牛乳"
+sweetness = 1.0
+thickness = 3.0
+richness = 5.0
+flavor = 1.0

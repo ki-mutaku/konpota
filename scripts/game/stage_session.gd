@@ -1,7 +1,9 @@
 extends Node
 
-# The B evaluator subscribes and completes this exact Customer/request pair.
+# Requests carry the exact Customer/request pair to the production evaluator.
 signal evaluation_requested(customer: Customer, request_id: int, payload: Variant)
+
+const ORDER_EVALUATOR: Script = preload("res://scripts/customers/customer_order_evaluator.gd")
 
 var _feedback_customer: Customer
 var _pending_result: StageResult
@@ -25,9 +27,12 @@ func _ready() -> void:
 	kitchen.pot.contents_changed.connect(hud.update_pot_contents)
 	# Replace only the static HUD; A's status panel and cooking remain intact.
 	kitchen.get_node("UI/HUDMount").hide()
+	var order_ids: Array[StringName] = ORDER_EVALUATOR.get_order_ids()
+	order_ids.shuffle()
 	for customer: Customer in customers:
 		customer.set_receiving_enabled(false)
 		var presentation: MVPCustomer = customer as MVPCustomer
+		presentation.set_order(order_ids[customers.find(customer)])
 		presentation.presentation_finished.connect(_on_presentation_finished.bind(customer))
 		stage_manager.connect_customer(customer)
 		customer.evaluation_requested.connect(_on_evaluation_requested.bind(customer))
@@ -54,6 +59,14 @@ func submit_evaluation(customer: Customer, request_id: int, result: EvaluationRe
 func _on_evaluation_requested(request_id: int, payload: Variant, customer: Customer) -> void:
 	hud.show_evaluation_pending()
 	evaluation_requested.emit(customer, request_id, payload)
+	_evaluate_order(customer, request_id, payload)
+
+
+func _evaluate_order(customer: Customer, request_id: int, payload: Variant) -> void:
+	var result: EvaluationResult = ORDER_EVALUATOR.evaluate(
+		(customer as MVPCustomer).order_id, payload,
+	)
+	submit_evaluation.call_deferred(customer, request_id, result)
 
 
 func _on_progress_changed(total: int, completed: int) -> void:
@@ -89,6 +102,8 @@ func _on_presentation_finished(customer: Customer) -> void:
 
 func _on_result_received(result: StageResult) -> void:
 	_pending_result = result
+	if kitchen.has_method("stop_background_music"):
+		kitchen.stop_background_music()
 	kitchen.process_mode = Node.PROCESS_MODE_DISABLED
 	if _feedback_customer == null:
 		_show_result(result)
