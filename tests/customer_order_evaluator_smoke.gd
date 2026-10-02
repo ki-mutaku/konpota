@@ -28,6 +28,20 @@ func _run_smoke_test() -> void:
 	assert(sweet_result.satisfaction == 3)
 	assert(sweet_result.achieved_axes[&"sweetness"] == false)
 	assert(sweet_result.verdict == EvaluationResult.Verdict.FAILURE)
+
+	var matching_recipe_with_stale_stats: Dictionary = {
+		"recipe_id": &"konpota_sweet",
+		"sweetness": 0.0,
+		"thickness": 0.0,
+		"richness": 0.0,
+		"flavor": 0.0,
+	}
+	var matching_result: EvaluationResult = CustomerOrderEvaluator.evaluate(
+		&"konpota_sweet",
+		matching_recipe_with_stale_stats,
+	)
+	assert(matching_result.satisfaction == 4)
+	assert(matching_result.verdict == EvaluationResult.Verdict.SUCCESS)
 	print("Customer order evaluator smoke test passed")
 	quit(0)
 

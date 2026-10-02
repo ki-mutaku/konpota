@@ -43,6 +43,16 @@ static func evaluate(order_id: StringName, payload: Variant) -> EvaluationResult
 	var target: Dictionary = ORDER_TARGETS.get(order_id, {}) as Dictionary
 	var actual: Dictionary = _extract_stats(payload)
 	var achieved: Dictionary = {}
+	if _extract_recipe_id(payload) == order_id:
+		for axis: StringName in AXES:
+			achieved[axis] = true
+		return EvaluationResult.new(
+			EvaluationResult.Verdict.SUCCESS,
+			AXES.size(),
+			achieved,
+			actual,
+			target,
+		)
 	var satisfaction: int = 0
 	for axis: StringName in AXES:
 		var reached: bool = (
@@ -57,6 +67,14 @@ static func evaluate(order_id: StringName, payload: Variant) -> EvaluationResult
 		else EvaluationResult.Verdict.FAILURE
 	)
 	return EvaluationResult.new(verdict, satisfaction, achieved, actual, target)
+
+
+static func _extract_recipe_id(payload: Variant) -> StringName:
+	if payload is SoupData:
+		return (payload as SoupData).id
+	if payload is Dictionary:
+		return StringName((payload as Dictionary).get("recipe_id", ""))
+	return &""
 
 
 static func _extract_stats(payload: Variant) -> Dictionary:
