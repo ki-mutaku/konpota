@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://dtnpycaco1owr"]
 
-[ext_resource type="Script" path="res://scripts/game/title.gd" id="1_title"]
-[ext_resource type="Texture2D" path="res://assets/ui/title/title_background.png" id="2_background"]
-[ext_resource type="AudioStream" path="res://assets/audio/title_menu.mp3" id="3_music"]
+[ext_resource type="Script" uid="uid://oynewpmuhm7m" path="res://scripts/game/title.gd" id="1_title"]
+[ext_resource type="Texture2D" uid="uid://lh3ao4uc1x5y" path="res://assets/ui/title/title_background.png" id="2_background"]
+[ext_resource type="AudioStream" uid="uid://cignncrfxeg7n" path="res://assets/audio/title_menu.mp3" id="3_music"]
 
-[node name="Title" type="Control"]
+[node name="Title" type="Control" unique_id=980117352]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,12 +13,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_title")
 
-[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=332978459]
 stream = ExtResource("3_music")
-volume_db = -12.0
+volume_db = -18.0
 autoplay = true
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1105428794]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,21 +30,22 @@ texture = ExtResource("2_background")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="GameStartButton" type="Button" parent="."]
+[node name="GameStartButton" type="Button" parent="." unique_id=22228492]
 unique_name_in_owner = true
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 0.105
 anchor_top = 0.68
 anchor_right = 0.49
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
+tooltip_text = "Game Start"
 focus_mode = 0
 mouse_default_cursor_shape = 2
 flat = true
-tooltip_text = "Game Start"
 
-[node name="ExitButton" type="Button" parent="."]
+[node name="ExitButton" type="Button" parent="." unique_id=596027153]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -65,17 +66,17 @@ theme_override_font_sizes/font_size = 22
 text = "EXIT"
 flat = true
 
-[node name="StatusLabel" type="Label" parent="."]
+[node name="StatusLabel" type="Label" parent="." unique_id=949972604]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -54.0
 offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.96, 0.82, 1)
 theme_override_colors/font_outline_color = Color(0.18, 0.07, 0.02, 1)
 theme_override_constants/outline_size = 8
