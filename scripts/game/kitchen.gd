@@ -8,6 +8,7 @@ signal soup_served(soup: Variant)
 @onready var cutting_board: CookingCuttingBoard = %CuttingBoard
 @onready var serving_counter: ServingCounter = %ServingCounter
 @onready var status_label: Label = %StatusLabel
+@onready var background_music: AudioStreamPlayer = $BackgroundMusic
 @onready var pot_drop_highlight: Polygon2D = %PotDropHighlight
 @onready var mixer_drop_highlight: Polygon2D = %MixerDropHighlight
 @onready var pot_ingredient_drop_area: DirectDropTarget = (
@@ -36,6 +37,10 @@ func _ready() -> void:
 	mixer.processing_completed.connect(_on_mixer_processing_completed)
 	cutting_board.ingredient_processed.connect(_on_ingredient_processed)
 	status_label.text = "材料を選んで、コンポタを作ろう"
+
+
+func stop_background_music() -> void:
+	background_music.stop()
 
 
 func add_ingredient_to_pot(ingredient: Variant, amount: float = 1.0) -> void:

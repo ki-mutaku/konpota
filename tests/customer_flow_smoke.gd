@@ -29,7 +29,9 @@ func _run_smoke_test() -> void:
 	root.add_child(bowl)
 	var invalid_inputs: Array[Variant] = [42, Resource.new(), {},
 		{"ingredients": [], "heat_level": 0.0, "stir_distance": 0.0},
-		{"ingredients": [42], "heat_level": 0.0, "stir_distance": 0.0}]
+		{"ingredients": [42], "heat_level": 0.0, "stir_distance": 0.0},
+		{"ingredients": 42, "heat_level": 0.0, "stir_distance": 0.0},
+		{"ingredients": [{"data": 42, "amount": 1.0}], "heat_level": 0.0, "stir_distance": 0.0}]
 	for payload: Variant in invalid_inputs:
 		assert(bowl.fill_soup(payload))
 		assert(not target.try_receive(bowl), "Unsupported input must be rejected")
@@ -80,8 +82,10 @@ func _run_smoke_test() -> void:
 	assert(target.enabled)
 	customer.free()
 	bowl.free()
+	pot.reset_state()
 	pot.free()
 	soup.free()
+	await create_timer(0.5).timeout
 	print("Customer flow smoke test passed (no scoring rules)")
 	quit(0)
 

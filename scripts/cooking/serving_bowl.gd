@@ -76,8 +76,17 @@ func _get_recipe_id(value: Variant) -> StringName:
 
 func _infer_recipe_id(snapshot: Dictionary) -> StringName:
 	var ingredient_ids: Dictionary = {}
-	for entry: Dictionary in snapshot.get("ingredients", []):
+	var entries: Variant = snapshot.get("ingredients", [])
+	if not entries is Array:
+		return &"konpota_water"
+	for entry: Variant in entries:
+		if not entry is Dictionary:
+			ingredient_ids.clear()
+			break
 		var data: Variant = entry.get("data")
+		if data != null and not data is Resource:
+			ingredient_ids.clear()
+			break
 		if data != null:
 			ingredient_ids[StringName(str(data.get("id")))] = true
 
